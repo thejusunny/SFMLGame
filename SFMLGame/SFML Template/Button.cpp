@@ -17,8 +17,6 @@ Button::Button(sf::Vector2f position, sf::Vector2f buttonSize, sf::Font* font, s
 	this->hoverColor = hoverColor;
 	this->pressColor = clickColor;
 	this->buttonShape.setFillColor(idleColor);
-
-
 }
 
 void Button::Render(sf::RenderTarget* target)
@@ -32,7 +30,6 @@ void Button::Update(const sf::Vector2f mousePosition)
 {
 
 	this->buttonState = ButtonState::IDLE;
-	
 	if (this->buttonShape.getGlobalBounds().contains(mousePosition))
 	{
 	

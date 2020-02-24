@@ -9,13 +9,18 @@ private:
 	static sf::Vector2f mousePosView;
 	static bool keyFlags[2];
 	static bool keyDownStates[2];
+	static sf::RenderWindow* window;
 public:
+	~Mouse();
+
+	static void Initialize(sf::RenderWindow* renderWindow);
 	const static sf::Vector2i GetMousePosScreen();
 	const static sf::Vector2i GetMousePosWindowi();
 	const static sf::Vector2f GetMousePosWindowf();
-	const static sf::Vector2f GetMousePosView();
+	const static sf::Vector2f GetMousePosView(sf::View* view);
+	const static sf::Vector2i GetMousePosWindowFromView(sf::Vector2f pos,sf::View* view);
 	
-	static void UpdateMousePosition(sf::RenderWindow* window);
+
 
 	static bool GetMouseKeyDown(sf::Mouse::Button button);
 

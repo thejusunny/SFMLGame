@@ -1,9 +1,14 @@
 #include "Game.h"
 
-Game::Game() 
+Game::Game()
 {
+
+	
 	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame");
+	Mouse::Initialize(this->renderWindow);
 	states.push(new MenuState(&this->states));
+
+	
 }
 
 Game::~Game()
@@ -23,7 +28,7 @@ void Game::Run()
 	while (true)
 	{
 		Time::UpdateClock();
-		Mouse::UpdateMousePosition(this->renderWindow);
+		
 		/*std::cout << Time::deltaTime<<"\n";
 		std::cout << Time::time;
 	
@@ -36,6 +41,7 @@ void Game::Run()
 	}
 	
 }
+
 
 bool Game::ProcessWindowMessages()
 {
@@ -77,6 +83,7 @@ void Game::Render()
 
 	if (!this->states.empty())
 		states.top()->Render(renderWindow);
+	this->renderWindow->setView(this->renderWindow->getDefaultView());
 	this->renderWindow->display();
 
 }

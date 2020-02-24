@@ -1,3 +1,4 @@
+
 #include "InputHandler.h"
 #include <SFML\Graphics.hpp>
 InputHandler::InputHandler()

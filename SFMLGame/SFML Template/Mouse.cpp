@@ -4,30 +4,40 @@ sf::Vector2i Mouse::mousePosWindow;
 sf::Vector2f Mouse::mousePosView;
 bool Mouse::keyDownStates[2];
 bool Mouse::keyFlags[2];
+sf::RenderWindow* Mouse::window;
+Mouse::~Mouse()
+{
+	delete window;
+}
+void Mouse::Initialize(sf::RenderWindow* renderWindow)
+{
+	window = renderWindow;
+}
 const sf::Vector2i Mouse::GetMousePosScreen()
 {
-	return mousePosScreen;
+	return sf::Mouse::getPosition();
 }
 const sf::Vector2i Mouse::GetMousePosWindowi()
 {
+	mousePosWindow = sf::Mouse::getPosition(*window);
 	return mousePosWindow;
 }
 const sf::Vector2f Mouse::GetMousePosWindowf()
 {
-	return sf::Vector2f(mousePosWindow.x,mousePosWindow.y);
+	return sf::Vector2f(GetMousePosWindowi().x, GetMousePosWindowi().y);
 }
-const sf::Vector2f Mouse::GetMousePosView()
+const sf::Vector2f Mouse::GetMousePosView( sf::View *view)
 {
+	mousePosView = window->mapPixelToCoords(sf::Mouse::getPosition(*window),*view);// Screen to world pos
 	return mousePosView;
 }
-void Mouse::UpdateMousePosition(sf::RenderWindow* window)
+
+const sf::Vector2i Mouse::GetMousePosWindowFromView(sf::Vector2f pos,sf::View* view)
 {
-
-	mousePosScreen = sf::Mouse::getPosition();
-	mousePosWindow = sf::Mouse::getPosition(*window);
-	mousePosView = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
-
+	
+	return window->mapCoordsToPixel(pos, *view);
 }
+
 
 bool Mouse::GetMouseKeyDown(sf::Mouse::Button button)
 {

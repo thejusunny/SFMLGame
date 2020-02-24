@@ -1,40 +1,81 @@
-﻿  TileMap.cpp
+﻿  Game.cpp
+  Main.cpp
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Game.h(3,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+  MenuState.cpp
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Game.h(3,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+  Mouse.cpp
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Game.h(3,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:             T=int
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:         and
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,66): warning C4244:         ]
   TileMapEditorState.cpp
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:         with
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:             T=float
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:         ]
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:         and
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:             T=unsigned int
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,151): warning C4244:         ]
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:         with
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:             T=float
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:         ]
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:         and
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:             T=unsigned int
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(59,110): warning C4244:         ]
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:         with
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:             T=float
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:         ]
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:         and
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:             T=unsigned int
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,116): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:             T=int
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:         and
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Mouse.cpp(27,42): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Game.h(3,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:         and
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:             T=unsigned int
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,185): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:         and
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:             T=unsigned int
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(142,144): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:         and
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:             T=unsigned int
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,117): warning C4244:         ]
+  TileSelectorGUI.cpp
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:         and
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:             T=unsigned int
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileMapEditorState.cpp(145,76): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(22,53): warning C4244:  '=': conversion from 'T' to 'int', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(22,53): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(22,53): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(22,53): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(22,53): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(23,50): warning C4244:  '=': conversion from 'T' to 'int', possible loss of data
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(23,50): warning C4244:         with
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(23,50): warning C4244:         [
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(23,50): warning C4244:             T=float
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(23,50): warning C4244:         ]
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(51,23): warning C4018:  '<': signed/unsigned mismatch
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(72,33): warning C4018:  '<': signed/unsigned mismatch
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(75,24): warning C4018:  '<': signed/unsigned mismatch
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(77,25): warning C4018:  '<': signed/unsigned mismatch
   Generating Code...
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:  'argument': conversion from 'const T' to 'T', possible loss of data
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:         with
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:             T=float
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:         ]
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:         and
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:         [
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:             T=unsigned int
-D:\GitHub\SFML\SFMLGame\SFML Template\TileMapEditorState.cpp(64,75): warning C4244:         ]
-  SFML Template.vcxproj -> D:\GitHub\SFML\SFMLGame\Debug\SFMLGame.exe
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TileSelectorGUI.cpp(218,10): warning C4018:  '<': signed/unsigned mismatch
+  SFML Template.vcxproj -> D:\GitHub\SFMLGame\SFMLGame\Debug\SFMLGame.exe

@@ -6,12 +6,13 @@ class Game
 {
 private:
 	sf::RenderWindow *renderWindow;
-
+	
 
 	std::stack<State*> states;
-	
+
 	
 public :
+
 	Game();
 	~Game();
 	
