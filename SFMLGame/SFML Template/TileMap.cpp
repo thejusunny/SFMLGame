@@ -1,9 +1,11 @@
 #include "TileMap.h"
 #include<iostream>
-TileMap::TileMap( float gridSize, sf::Vector2u maxSize, unsigned int layers,TileSelectorGUI *gui)
+TileMap::TileMap( float gridSize, sf::Vector2u maxSize, unsigned int layers,TileSelectorGUI *gui,sf::RectangleShape *mask,sf::View *view)
 {
 	this->gridSizeF = gridSize;
 	this->tileSelectionGUI = gui;
+	this->rectMask = mask;
+	this->view = view;
 	this->gridSizeU = static_cast<unsigned>(gridSizeF);
 	if (layers <= 0)
 		layers = 1;
@@ -26,8 +28,11 @@ TileMap::TileMap( float gridSize, sf::Vector2u maxSize, unsigned int layers,Tile
 			}
 		}
 	}
+	this->collisionRect.setFillColor(sf::Color(255, 0, 0, 100));
+	this->collisionRect.setSize(sf::Vector2f( gridSizeF,gridSizeF));
+	this->collisionRect.setOutlineColor(sf::Color(0, 255, 0, 255));
+	this->collisionRect.setOutlineThickness(1.f);
 
-	
 }
 void TileMap::SaveToFile(std::string fileName)
 {
@@ -127,8 +132,9 @@ void TileMap::LoadFromFile(std::string fileName)
 		
 			std::cout << x<<" "<<y<<" "<<z<<" "<< textureIndex <<"\n";
 			
-			this->map[x][y][z] = new Tile(tileSelectionGUI->GetTextureFromIndex(textureIndex), sf::Vector2u(x*gridSizeU,y*gridSizeU), gridSizeU, textureIndex);
-			
+			this->map[x][y][z] = new Tile(tileSelectionGUI->GetTextureFromIndex(textureIndex), sf::Vector2u(x*gridSizeU,y*gridSizeU), gridSizeU, textureIndex,collision);
+			if(collision)
+			this->collisionRect.setPosition(map[x][y][z]->GetPosition());
 		}
 
 
@@ -154,6 +160,11 @@ void TileMap::ClearMap()
 			}
 		}
 	}
+
+}
+
+void TileMap::Update()
+{
 
 }
 
@@ -183,11 +194,25 @@ void TileMap::Render(sf::RenderTarget &target)
 		{
 			for (auto *z : y)
 			{
-				if(z !=nullptr)// if the tile is not deleted or empty
-				z->Render(target);
+				if(z !=nullptr )// if the tile is not deleted or empty
+				{ 
+					
+					z->Render(target);
+					if (z->IsCollidable())
+					{
+						this->collisionRect.setPosition(z->GetPosition());
+						target.draw(this->collisionRect);
+					}
+					
+					
+				
+				}
+				
+			
 			}
 		}
 	}
+	
 	
 }
 
@@ -204,33 +229,27 @@ void TileMap::RemoveTile(sf::Vector2u position)
 	}
 }
 
-void TileMap::AddTile( sf::Texture* texture,int tileIndex, sf::Vector2u position)
+void TileMap::AddTile( sf::Texture* texture,int tileIndex, sf::Vector2u position, bool collision)
 {
 	sf::Vector2u gridPosition;
 
 	gridPosition.x = position.x / gridSizeU;
 	gridPosition.y = position.y / gridSizeU;
 	
-	//std::string tileName;
-	//if (tileIndex <= 9)
-	//	tileName = "tile_000" + std::to_string(tileIndex);
-	//else if(tileIndex<=99)
-	//	tileName = "tile_00" + std::to_string(tileIndex);
-	//else
-	//	tileName = "tile_0" + std::to_string(tileIndex);
-
-	
 	if (this->map[gridPosition.x][gridPosition.y][layers-1] != NULL)
 	{
 		this->map[gridPosition.x][gridPosition.y][layers-1]->SetTexture(texture);
+		this->map[gridPosition.x][gridPosition.y][layers - 1]->SetCollision(collision);
+	
 	
 	}
 	else
 	{
-		this->map[gridPosition.x][gridPosition.y][layers-1] = new Tile(texture,position,80, tileIndex);
+		this->map[gridPosition.x][gridPosition.y][layers-1] = new Tile(texture,position,80, tileIndex,collision);
 		std::cout << "Adding new tile to grid" << gridPosition.x << "," << gridPosition.y << std::endl;
 	
 	}
+
 		
 
 }

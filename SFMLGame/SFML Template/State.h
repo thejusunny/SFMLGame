@@ -1,7 +1,6 @@
 #pragma once
 #include "TileMap.h"
 
-#include"GameObject.h"
 #include "Drawables.h"
 #include "Time.h"
 #include<iostream>
@@ -13,7 +12,7 @@ private :
 	bool quit = false;
 protected:
 	std::stack<State*> *gameStates;
-	sf::View mainView;
+
 	sf::View guiView;
 	
 public:

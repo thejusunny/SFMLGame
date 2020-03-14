@@ -5,6 +5,8 @@ sf::Vector2f Mouse::mousePosView;
 bool Mouse::keyDownStates[2];
 bool Mouse::keyFlags[2];
 sf::RenderWindow* Mouse::window;
+float Mouse::timeOfLastKeyPress;
+float Mouse::timeSinceLastKeyPress;
 Mouse::~Mouse()
 {
 	delete window;
@@ -28,14 +30,14 @@ const sf::Vector2f Mouse::GetMousePosWindowf()
 }
 const sf::Vector2f Mouse::GetMousePosView( sf::View *view)
 {
-	mousePosView = window->mapPixelToCoords(sf::Mouse::getPosition(*window),*view);// Screen to world pos
+	mousePosView = window->mapPixelToCoords(sf::Mouse::getPosition(*window),*view);// Screen to View pos
 	return mousePosView;
 }
 
 const sf::Vector2i Mouse::GetMousePosWindowFromView(sf::Vector2f pos,sf::View* view)
 {
 	
-	return window->mapCoordsToPixel(pos, *view);
+	return window->mapCoordsToPixel(pos, *view);// view to window
 }
 
 
@@ -43,14 +45,15 @@ bool Mouse::GetMouseKeyDown(sf::Mouse::Button button)
 {
 	
 	bool isPressed = sf::Mouse::isButtonPressed(button);
+	timeSinceLastKeyPress = Time::time - timeOfLastKeyPress;
 
-	if (keyFlags[button] == false && isPressed)
+	if (keyFlags[button] == false && isPressed )
 	{
 		keyFlags[button] = true;
 		keyDownStates[button] = true;
-
+		timeOfLastKeyPress = Time::time;
 	}
-	else
+	else if(timeSinceLastKeyPress>=Time::deltaTime)
 	{
 		keyDownStates[button] = false;
 

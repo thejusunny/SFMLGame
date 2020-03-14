@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include<iostream>
 #include"Mouse.h"
+
 enum ButtonState
 {
 	IDLE =0, HOVER, PRESSED

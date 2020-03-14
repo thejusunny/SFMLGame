@@ -3,9 +3,8 @@
 #include<iostream>
 #include<vector>
 #include<string>
-#include "Mouse.h"
 #include "Button.h"
-#include "Keyboard.h"
+
 class TileSelectorGUI
 {
 public:
@@ -21,6 +20,7 @@ public:
 	bool IsMouseEnteringPanel();
 	void SetActive(bool state);
 	sf::View guiView;
+
 private:
 
 	void Input();
@@ -30,7 +30,7 @@ private:
 	void InitNavigationPanel();
 	void InitTileSelectionPanel();
 
-	bool isActive = false;
+	bool isActive =  true;
 	float tilePadding;
 	int selectedTileIndex;
 	sf::Font font;
@@ -44,11 +44,13 @@ private:
 	sf::Vector2f tileSelectorPanelPosition;
 	sf::Vector2f tileSize;
 	sf::Text pageNoText;
+	//TextBox* saveTextBox;
 	int noOfRows;
 	int noOfCollums;
 	int maxTiles;
 	int noOfPages;
 	int currentPageIndex; 
+	//TextBox* saveTextBox;
 	
 
 };

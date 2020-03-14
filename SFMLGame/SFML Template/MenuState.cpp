@@ -3,8 +3,8 @@
 MenuState::MenuState(std::stack<State*> *states)
 {
 	this->gameStates = states;
-	this->mainView.setSize(sf::Vector2f(1920, 1080));
-	this->mainView.setCenter(sf::Vector2f(1920 / 2, 1080 / 2));
+	this->guiView.setSize(sf::Vector2f(1920, 1080));
+	this->guiView.setCenter(sf::Vector2f(1920 / 2, 1080 / 2));
 	OnEnter();
 	InitFonts();
 	buttons["Start_Button"] = new Button(sf::Vector2f(100, 200), sf::Vector2f(150, 50), &this->font, "Start", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
@@ -33,6 +33,7 @@ void MenuState::InitFonts()
 
 void MenuState::Render(sf::RenderTarget *target)
 {
+	target->setView(this->guiView);
 	this->RenderHUD(target);
 }
 
@@ -55,7 +56,7 @@ void MenuState::Update()
 {
 	for (auto& button : buttons)
 	{
-		button.second->Update(Mouse::GetMousePosView(&this->mainView));
+		button.second->Update(Mouse::GetMousePosView(&this->guiView));
 
 	}
 	Input();

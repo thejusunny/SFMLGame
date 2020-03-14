@@ -29,6 +29,7 @@ TileSelectorGUI::TileSelectorGUI()
 	this->MapTexturesToTileSelectorGUI();
 
 	this->InitNavigationPanel();
+	//this->saveTextBox = new TextBox(sf::Vector2f(1500, 1200), sf::Vector2f(400, 50), sf::Color::Red, sf::Color::White, sf::Color::Black);
 
 }
 TileSelectorGUI::~TileSelectorGUI()
@@ -36,6 +37,7 @@ TileSelectorGUI::~TileSelectorGUI()
 
 	for (auto& it : buttons)
 		delete& it;
+	//delete saveTextBox;
 }
 void TileSelectorGUI::InitFonts()
 {
@@ -98,15 +100,15 @@ void TileSelectorGUI::InitNavigationPanel()
 	this->tileSelectorNavigationPanel.setOutlineThickness(1.f);
 
 	//Buttons
-	buttons["Prev_Page_Button"] = new Button(sf::Vector2f(1560, 550), sf::Vector2f(60, 35), &this->font, "Prev", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	buttons["Next_Page_Button"] = new Button(sf::Vector2f(1720, 550), sf::Vector2f(60, 35), &this->font, "Next", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Prev_Page_Button"] = new Button(sf::Vector2f(1600, 550), sf::Vector2f(60, 35), &this->font, "Prev", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Next_Page_Button"] = new Button(sf::Vector2f(1750, 550), sf::Vector2f(60, 35), &this->font, "Next", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
 	
 	
 	//PageText
 	pageNoText.setFont(this->font);
 	pageNoText.setFillColor(sf::Color::White);
 	pageNoText.setCharacterSize(15);
-	pageNoText.setPosition(sf::Vector2f(1650, 560));
+	pageNoText.setPosition(sf::Vector2f(1695, 560));
 	pageNoText.setString(std::to_string((this->currentPageIndex + 1)) + "/" + std::to_string(this->noOfPages));
 }
 void TileSelectorGUI::InitTileSelectionPanel()
@@ -120,7 +122,7 @@ void TileSelectorGUI::InitTileSelectionPanel()
 	this->tileSelectorPanel.setOutlineThickness(1.f);
 	this->tileSelectorPanelSize = sf::Vector2f(350, 420);
 	this->tileSelectorPanel.setSize(this->tileSelectorPanelSize);
-	this->tileSelectorPanelPosition = sf::Vector2f(1500, 100);
+	this->tileSelectorPanelPosition = sf::Vector2f(1535, 100);
 	this->tileSelectorPanel.setPosition(this->tileSelectorPanelPosition);
 
 
@@ -145,7 +147,7 @@ void TileSelectorGUI::Update()
 		button.second->Update(Mouse::GetMousePosView(&this->guiView));
 
 	}
-	
+	//this->saveTextBox->Update();
 	this->Input();
 	pageNoText.setString(std::to_string((this->currentPageIndex + 1)) + "/" + std::to_string(this->noOfPages));
 }
@@ -166,6 +168,7 @@ void TileSelectorGUI::Render(sf::RenderTarget* target)
 	target->draw(this->pageNoText);
 	//if (this->tileSelectorPanel.getGlobalBounds().contains(Mouse::GetMousePosWindowf()))
 	target->draw(this->tileSelectorRect);
+	//this->saveTextBox->Render(target);
 }
 void TileSelectorGUI::Input()
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include<iostream>
+#include "Time.h"
 class Mouse
 {
 private:
@@ -10,6 +11,9 @@ private:
 	static bool keyFlags[2];
 	static bool keyDownStates[2];
 	static sf::RenderWindow* window;
+	static float timeOfLastKeyPress;
+	static float timeSinceLastKeyPress;
+
 public:
 	~Mouse();
 

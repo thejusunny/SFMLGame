@@ -1,12 +1,19 @@
 #include "Game.h"
-
+std::string Game::inputString;
+float Game::timeOflastClear;
+float Game::timeSinceLastFrame;
 Game::Game()
 {
 
 	
+
 	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame");
+	TextBox::SetWindow(this->renderWindow);
 	Mouse::Initialize(this->renderWindow);
+	CordinateConverter::Initialize(this->renderWindow);
+	inputString = "";
 	states.push(new MenuState(&this->states));
+
 
 	
 }
@@ -53,14 +60,22 @@ bool Game::ProcessWindowMessages()
 			renderWindow->close();
 			exit(0);
 		}
+		else if (event.type == sf::Event::TextEntered)
+		{
+			if(event.text.unicode!=8)
+			inputString = event.text.unicode;
+
+		}
+		
 	}
+
 	return true;
 }
 
+
 void Game::Update()
 {
-	for (auto& object : GameObject::GetAllGameObjects())
-		object->Update();	
+	
 
 	if (!this->states.empty())
 	{
@@ -79,11 +94,25 @@ void Game::Update()
 
 void Game::Render()
 {
+	
 	this->renderWindow->clear();
-
 	if (!this->states.empty())
 		states.top()->Render(renderWindow);
 	this->renderWindow->setView(this->renderWindow->getDefaultView());
 	this->renderWindow->display();
 
+}
+
+const  std::string
+Game::GetInputChar()
+{
+	std::string temp = inputString;
+	inputString = "";
+	/*timeSinceLastFrame = Time::time - timeOflastClear;
+	if (timeSinceLastFrame >= Time::deltaTime)
+	{
+		inputString = "";
+		timeOflastClear = Time::time;
+	}*/
+	return temp;
 }

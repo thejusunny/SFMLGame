@@ -88,7 +88,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CordinateConverter.cpp" />
     <ClCompile Include="Drawables.cpp" />
+    <ClCompile Include="DropDownBox.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputHandler.cpp" />
@@ -98,6 +100,7 @@
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TileMapEditorState.cpp" />
@@ -106,7 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CordinateConverter.h" />
     <ClInclude Include="Drawables.h" />
+    <ClInclude Include="DropDownBox.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputHandler.h" />
@@ -116,6 +121,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="TextBox.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileMapEditorState.h" />
