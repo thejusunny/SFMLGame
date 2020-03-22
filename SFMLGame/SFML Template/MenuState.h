@@ -1,12 +1,11 @@
 #pragma once
 #include "State.h"
-#include "Button.h"
 #include "TileMapEditorState.h"
 class MenuState : public State
 {
 private:
 
-	std::map<std::string, Button*> buttons;
+	std::map<std::string, GUI::Button*> buttons;
 	sf::Font font;
 
 public:

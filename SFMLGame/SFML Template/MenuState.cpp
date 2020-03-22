@@ -7,9 +7,9 @@ MenuState::MenuState(std::stack<State*> *states)
 	this->guiView.setCenter(sf::Vector2f(1920 / 2, 1080 / 2));
 	OnEnter();
 	InitFonts();
-	buttons["Start_Button"] = new Button(sf::Vector2f(100, 200), sf::Vector2f(150, 50), &this->font, "Start", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	buttons["Editor_Button"] = new Button(sf::Vector2f(100, 300), sf::Vector2f(250, 50), &this->font, "Tile Map Editor", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	buttons["Exit_Button"] = new Button(sf::Vector2f(100, 400), sf::Vector2f(150, 50), &this->font, "Exit", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Start_Button"] = new GUI::Button(sf::Vector2f(100, 200), sf::Vector2f(150, 50), &this->font, "Start", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Editor_Button"] = new GUI::Button(sf::Vector2f(100, 300), sf::Vector2f(250, 50), &this->font, "Tile Map Editor", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Exit_Button"] = new GUI::Button(sf::Vector2f(100, 400), sf::Vector2f(150, 50), &this->font, "Exit", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
 
 }
 
@@ -56,7 +56,7 @@ void MenuState::Update()
 {
 	for (auto& button : buttons)
 	{
-		button.second->Update(Mouse::GetMousePosView(&this->guiView));
+		button.second->Update(InputDevices::Mouse::GetMousePosView(&this->guiView));
 
 	}
 	Input();

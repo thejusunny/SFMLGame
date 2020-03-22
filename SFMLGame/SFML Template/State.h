@@ -1,11 +1,10 @@
 #pragma once
 #include "TileMap.h"
-
+#include "GUI.h"
 #include "Drawables.h"
 #include "Time.h"
 #include<iostream>
 #include<stack>
-#include "Mouse.h"
 class State
 {
 private :

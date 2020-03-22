@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream> 
-#include <queue>
 #include"KeyboardEvent.h"
 #include <SFML\Graphics.hpp>
 
@@ -11,7 +10,6 @@ public:
 	static const bool IsKeyPressed(sf::Keyboard::Key key);
 	static const bool IsKeyDown(sf::Keyboard::Key key);
 
-	std::queue<KeyboardEvent> keyBuffer;
 	Keyboard();
 
 private:

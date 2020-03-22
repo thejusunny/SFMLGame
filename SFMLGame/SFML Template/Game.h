@@ -2,7 +2,6 @@
 #include "MenuState.h";
 #include "CordinateConverter.h"
 #include<stack>
-
 class Game
 {
 private:
@@ -11,6 +10,7 @@ private:
 	static std::string inputString;
 	static float timeOflastClear;
 	static float timeSinceLastFrame;
+	
 
 public :
 

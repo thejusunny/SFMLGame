@@ -11,8 +11,8 @@ TileMapEditorState::TileMapEditorState()
 
 	//GUI stats text
 
-	this->mouseInformationText.setPosition(1540, 700);
-	this->tileInformationText.setPosition(1540, 750);
+	this->mouseInformationText.setPosition(1540, 750);
+	this->tileInformationText.setPosition(1540, 800);
 	this->mouseInformationText.setFont(this->font);
 	this->tileInformationText.setFont(this->font);
 	this->mouseInformationText.setFillColor(sf::Color::White);
@@ -39,9 +39,9 @@ TileMapEditorState::TileMapEditorState()
 	this->selectionHeaderText.setCharacterSize(22);
 	this->selectionHeaderText.setPosition(sf::Vector2f(1540, 50));
 	//Buttons
-	buttons["Load"] = new Button(sf::Vector2f(1540, 650), sf::Vector2f(60, 35), &this->font, "Load", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	buttons["Save"] = new Button(sf::Vector2f(1660, 650), sf::Vector2f(60, 35), &this->font, "Save", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	this->textBox = new TextBox(sf::Vector2f(500, 500), sf::Vector2f(300, 50), sf::Color::Black, sf::Color::White, sf::Color::Black);
+	buttons["Load"] = new GUI::Button(sf::Vector2f(1540, 700), sf::Vector2f(60, 35), &this->font, "Load", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Save"] = new GUI::Button(sf::Vector2f(1660, 700), sf::Vector2f(60, 35), &this->font, "Save", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	this->saveTextBox = new GUI::TextBox(sf::Vector2f(1540, 650), sf::Vector2f(200, 30), sf::Color::Red, sf::Color::White, sf::Color::Black);
 }
 
 void TileMapEditorState::InitFont()
@@ -55,7 +55,7 @@ void TileMapEditorState::InitFont()
 TileMapEditorState::~TileMapEditorState()
 {
 	delete this->map;
-	delete this-> textBox;
+	delete this-> saveTextBox;
 }
 
 void TileMapEditorState::CheckForQuit()
@@ -66,9 +66,9 @@ void TileMapEditorState::CheckForQuit()
 
 void TileMapEditorState::Update()
 {
-	sf::Vector2f mouseViewPos = Mouse::GetMousePosView(&this->mapView);
+	sf::Vector2f mouseViewPos = InputDevices::Mouse::GetMousePosView(&this->mapView);
 	this->mouseInfoStr = "MouseViewPos  x - " +std::to_string(static_cast<int> (mouseViewPos.x)) + " y - "+ std::to_string(static_cast<int> ( mouseViewPos.y))+"\n";
-	this->mouseInfoStr += "MouseWindowPos  x - " + std::to_string( Mouse::GetMousePosWindowi().x) + " y - " + std::to_string(Mouse::GetMousePosWindowi().y)+ "\n";
+	this->mouseInfoStr += "MouseWindowPos  x - " + std::to_string(InputDevices::Mouse::GetMousePosWindowi().x) + " y - " + std::to_string(InputDevices::Mouse::GetMousePosWindowi().y)+ "\n";
 	this->mouseInformationText.setString(this->mouseInfoStr);
 
 	this->tileInfoStr = "TilePosGrid  x - " + std::to_string(static_cast<int>(this->gridSelectionRect.getPosition().x/this->gridSize)) + " y - " + std::to_string(static_cast<int>( this->gridSelectionRect.getPosition().y/ this->gridSize))+"\n";
@@ -82,12 +82,12 @@ void TileMapEditorState::Update()
 	
 	for (auto& button : buttons)
 	{
-		button.second->Update(Mouse::GetMousePosView(&this->guiView));
+		button.second->Update(InputDevices::Mouse::GetMousePosView(&this->guiView));
 
 	}
 	
 	
-	this->textBox->Update();
+	this->saveTextBox->Update();
 	this->map->Update();
 	this->Input();
 }
@@ -115,7 +115,7 @@ void TileMapEditorState::RenderGUI(sf::RenderTarget* target)
 		button.second->Render(target);
 	if (this->tileSelectorGUI.IsActive())
 		this->tileSelectorGUI.Render(target);
-	this->textBox->Render(target);
+	this->saveTextBox->Render(target);
 }
 
 void TileMapEditorState::RenderHUD(sf::RenderTarget* target)
@@ -177,23 +177,27 @@ void TileMapEditorState::Input()
 	}
 	if (buttons["Save"]->IsPressed())
 	{
-		this->map->SaveToFile("TileMap.map");
+		this->map->SaveToFile(saveTextBox->GetText()+".map");
 	}
 	if (buttons["Load"]->IsPressed())
 	{
+		std::string mapName = saveTextBox->GetText();
+		if(mapName.length()<=1)
 		this->map->LoadFromFile("TileMap.map");
+		else
+			this->map->LoadFromFile(mapName+".map");
 	}
 
 	if (!this->tileSelectorGUI.IsMouseEnteringPanel()||!this->tileSelectorGUI.IsActive())
 	{
 				
 		
-		if (Mouse::GetMouseKeyDown(sf::Mouse::Left))
+		if (InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Left))
 		{
 			
 			this->map->AddTile(tileSelectorGUI.GetSelectedTexture(), tileSelectorGUI.GetTextureIndex(), sf::Vector2u(this->gridSelectionRect.getPosition().x, this->gridSelectionRect.getPosition().y), this->collision);
 		}
-		if (Mouse::GetMouseKeyDown(sf::Mouse::Right))
+		if (InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Right))
 		{
 			this->map->RemoveTile(sf::Vector2u(this->gridSelectionRect.getPosition().x, this->gridSelectionRect.getPosition().y));
 		}

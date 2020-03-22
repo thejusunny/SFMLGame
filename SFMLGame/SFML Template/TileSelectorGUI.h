@@ -3,7 +3,7 @@
 #include<iostream>
 #include<vector>
 #include<string>
-#include "Button.h"
+#include "GUI.h"
 
 class TileSelectorGUI
 {
@@ -35,7 +35,7 @@ private:
 	int selectedTileIndex;
 	sf::Font font;
 	std::vector <std::vector< sf::RectangleShape>> availableTiles;
-	std::map<std::string, Button*> buttons;
+	std::map<std::string, GUI::Button*> buttons;
 	std::vector <sf::Texture> textures;
 	sf::RectangleShape tileSelectorRect;
 	sf::RectangleShape tileSelectorPanel;

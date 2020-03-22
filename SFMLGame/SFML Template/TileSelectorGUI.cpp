@@ -4,7 +4,6 @@
 TileSelectorGUI::TileSelectorGUI()
 {
 
-
 	this->maxTiles = 480;
 	this->tilePadding = 20.f;
 	this->currentPageIndex = 0;
@@ -29,7 +28,7 @@ TileSelectorGUI::TileSelectorGUI()
 	this->MapTexturesToTileSelectorGUI();
 
 	this->InitNavigationPanel();
-	//this->saveTextBox = new TextBox(sf::Vector2f(1500, 1200), sf::Vector2f(400, 50), sf::Color::Red, sf::Color::White, sf::Color::Black);
+	
 
 }
 TileSelectorGUI::~TileSelectorGUI()
@@ -37,7 +36,7 @@ TileSelectorGUI::~TileSelectorGUI()
 
 	for (auto& it : buttons)
 		delete& it;
-	//delete saveTextBox;
+	
 }
 void TileSelectorGUI::InitFonts()
 {
@@ -100,8 +99,8 @@ void TileSelectorGUI::InitNavigationPanel()
 	this->tileSelectorNavigationPanel.setOutlineThickness(1.f);
 
 	//Buttons
-	buttons["Prev_Page_Button"] = new Button(sf::Vector2f(1600, 550), sf::Vector2f(60, 35), &this->font, "Prev", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	buttons["Next_Page_Button"] = new Button(sf::Vector2f(1750, 550), sf::Vector2f(60, 35), &this->font, "Next", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Prev_Page_Button"] = new GUI::Button(sf::Vector2f(1600, 550), sf::Vector2f(60, 35), &this->font, "Prev", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
+	buttons["Next_Page_Button"] = new GUI::Button(sf::Vector2f(1750, 550), sf::Vector2f(60, 35), &this->font, "Next", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
 	
 	
 	//PageText
@@ -144,10 +143,10 @@ void TileSelectorGUI::Update()
 	sf::Vector2f relativePosition;
 	for (auto& button : buttons)
 	{
-		button.second->Update(Mouse::GetMousePosView(&this->guiView));
+		button.second->Update(InputDevices::Mouse::GetMousePosView(&this->guiView));
 
 	}
-	//this->saveTextBox->Update();
+	
 	this->Input();
 	pageNoText.setString(std::to_string((this->currentPageIndex + 1)) + "/" + std::to_string(this->noOfPages));
 }
@@ -168,21 +167,21 @@ void TileSelectorGUI::Render(sf::RenderTarget* target)
 	target->draw(this->pageNoText);
 	//if (this->tileSelectorPanel.getGlobalBounds().contains(Mouse::GetMousePosWindowf()))
 	target->draw(this->tileSelectorRect);
-	//this->saveTextBox->Render(target);
+
 }
 void TileSelectorGUI::Input()
 {
 	sf::Vector2f relativePosition;
 	sf::Vector2i selectedTileIndex2D;
-	if (this->tileSelectorPanel.getGlobalBounds().contains(Mouse::GetMousePosView(&this->guiView)))
+	if (this->tileSelectorPanel.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosView(&this->guiView)))
 	{
 
-		if (Mouse::GetMouseKeyDown(sf::Mouse::Left))
+		if (InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Left))
 		{
 
-			std::cout << tileSelectorPanelPosition.x << ","<< Mouse::GetMousePosWindowf().x<<std::endl;
-			selectedTileIndex2D.x = (static_cast<int>((Mouse::GetMousePosWindowf().x - tileSelectorPanelPosition.x)) / static_cast<int>((tileSize.x + this->tilePadding)));
-			selectedTileIndex2D.y = (static_cast<int>((Mouse::GetMousePosWindowf().y - tileSelectorPanelPosition.y)) / static_cast<int>((tileSize.y + this->tilePadding)));
+			std::cout << tileSelectorPanelPosition.x << ","<< InputDevices::Mouse::GetMousePosWindowf().x<<std::endl;
+			selectedTileIndex2D.x = (static_cast<int>((InputDevices::Mouse::GetMousePosWindowf().x - tileSelectorPanelPosition.x)) / static_cast<int>((tileSize.x + this->tilePadding)));
+			selectedTileIndex2D.y = (static_cast<int>((InputDevices::Mouse::GetMousePosWindowf().y - tileSelectorPanelPosition.y)) / static_cast<int>((tileSize.y + this->tilePadding)));
 			relativePosition.x = ((selectedTileIndex2D.x) * (tileSize.x + this->tilePadding)) + tileSelectorPanelPosition.x;
 			relativePosition.y = ((selectedTileIndex2D.y) * (tileSize.x + this->tilePadding)) + tileSelectorPanelPosition.y;
 			this->selectedTileIndex = ((selectedTileIndex2D.y * this->noOfCollums) + selectedTileIndex2D.x);
@@ -227,7 +226,7 @@ sf::Texture* TileSelectorGUI::GetTextureFromIndex(int index)
 
 bool TileSelectorGUI::IsMouseEnteringPanel()
 {
-	if (this->tileSelectorPanel.getGlobalBounds().contains(Mouse::GetMousePosWindowf()) || this->tileSelectorNavigationPanel.getGlobalBounds().contains(Mouse::GetMousePosWindowf()))
+	if (this->tileSelectorPanel.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()) || this->tileSelectorNavigationPanel.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()))
 		return true;
 
 	return false;

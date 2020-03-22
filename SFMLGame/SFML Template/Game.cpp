@@ -8,8 +8,8 @@ Game::Game()
 	
 
 	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame");
-	TextBox::SetWindow(this->renderWindow);
-	Mouse::Initialize(this->renderWindow);
+	GUI::TextBox::SetWindow(this->renderWindow);
+	InputDevices::Mouse::Initialize(this->renderWindow);
 	CordinateConverter::Initialize(this->renderWindow);
 	inputString = "";
 	states.push(new MenuState(&this->states));

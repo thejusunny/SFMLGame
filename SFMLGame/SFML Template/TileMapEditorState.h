@@ -2,7 +2,6 @@
 #include "State.h"
 #include "TileSelectorGUI.h"
 #include "Keyboard.h"
-#include "TextBox.h"
 
 class TextBox;
 class TileMapEditorState: public State
@@ -13,7 +12,7 @@ protected:
 	sf::RectangleShape gridSelectionRect;
 	float gridSize;
 	TileSelectorGUI tileSelectorGUI;
-	std::map<std::string, Button*> buttons;
+	std::map<std::string, GUI::Button*> buttons;
 	sf::Font font;
 	float viewMoveSpeed;
 	sf::RectangleShape sidePanel;
@@ -24,7 +23,7 @@ protected:
 	std::string tileInfoStr;
 	sf::Text mouseInformationText;
 	sf::Text tileInformationText;
-	TextBox *textBox;
+	GUI::TextBox *saveTextBox;
 public :
 	
 	TileMapEditorState();
