@@ -1,10 +1,8 @@
 #include "TileMap.h"
 #include<iostream>
-TileMap::TileMap( float gridSize, sf::Vector2u maxSize, unsigned int layers,TileSelectorGUI *gui,sf::RectangleShape *mask,sf::View *view)
+TileMap::TileMap( float gridSize, sf::Vector2u maxSize, unsigned int layers,sf::View *view)
 {
 	this->gridSizeF = gridSize;
-	this->tileSelectionGUI = gui;
-	this->rectMask = mask;
 	this->view = view;
 	this->gridSizeU = static_cast<unsigned>(gridSizeF);
 	if (layers <= 0)
@@ -22,7 +20,7 @@ TileMap::TileMap( float gridSize, sf::Vector2u maxSize, unsigned int layers,Tile
 			this->map[x].push_back( std::vector<Tile*>()); // 2nd vector
 			for (size_t z = 0; z < layers; z++)
 			{
-				this->map[x][y].resize(this->layers);
+				this->map[x][y].resize(this->layers-1);
 				this->map[x][y].push_back(NULL); // 3rd vector
 
 			}
@@ -80,7 +78,7 @@ void TileMap::SaveToFile(std::string fileName)
 
 }
 
-void TileMap::LoadFromFile(std::string fileName)
+void TileMap::LoadFromFile(std::string fileName,TileSelectorPanel *tileSelectorMap)
 {
 	/*
 	MAXSIZE X,Y- Size of the whole TileMap X x Y
@@ -90,11 +88,13 @@ void TileMap::LoadFromFile(std::string fileName)
 	X Y Z positions, TextureIndex, Collision
 
 	*/
+	std::cout <<"Grid"+ gridSizeU;
+
 	this->ClearMap();
 	this->gridSizeU = static_cast<unsigned>(gridSizeF);
 	this->layers = layers;
 	this->maxSize = maxSize;
-	this->map.resize(this->maxSize.x);
+	this->map.resize(this->maxSize.x-1);
 	
 	std::ifstream inputStream;
 	std::string filePath = "../" + fileName;
@@ -110,16 +110,17 @@ void TileMap::LoadFromFile(std::string fileName)
 	if (inputStream.is_open())
 	{
 		inputStream >> this->maxSize.x >> this->maxSize.y >> this->gridSizeU >> this->layers;
+		this->layers = 4;
 		for (size_t x = 0; x < this->maxSize.x; x++)
 		{
 			this->map.push_back(std::vector< std::vector<Tile*>>());
 			for (size_t y = 0; y < this->maxSize.y; y++)
 			{
-				this->map[x].resize(this->maxSize.y);
+				this->map[x].resize(this->maxSize.y-1);
 				this->map[x].push_back(std::vector<Tile*>()); // 2nd vector
 				for (size_t z = 0; z < layers; z++)
 				{
-					this->map[x][y].resize(this->layers);
+					this->map[x][y].resize(this->layers-1);
 					this->map[x][y].push_back(NULL); // 3rd vector
 
 				}
@@ -132,15 +133,20 @@ void TileMap::LoadFromFile(std::string fileName)
 		
 			std::cout << x<<" "<<y<<" "<<z<<" "<< textureIndex <<"\n";
 			
-			this->map[x][y][z] = new Tile(tileSelectionGUI->GetTextureFromIndex(textureIndex), sf::Vector2u(x*gridSizeU,y*gridSizeU), gridSizeU, textureIndex,collision);
+			this->map[x][y][z] = new Tile(tileSelectorMap->GetTextureFromIndex(textureIndex),0,sf::Vector2u(x*gridSizeU,y*gridSizeU), gridSizeU, textureIndex,collision);
 			if(collision)
 			this->collisionRect.setPosition(map[x][y][z]->GetPosition());
 		}
 
-
+		
 
 	}
 	inputStream.close();
+}
+
+std::vector<std::vector<std::vector<Tile*>>> TileMap::GetMap()
+{
+	return this->map;
 }
 
 void TileMap::ClearMap()
@@ -168,6 +174,28 @@ void TileMap::Update()
 
 }
 
+const float TileMap::GetGridSizeF() const
+{
+	return gridSizeF;
+}
+
+sf::View* TileMap::GetMapView() const
+{
+	return this->view;
+}
+
+void TileMap::UpdateTiles(sf::Vector2u tileIndex, std::vector<Tile*> tiles)
+{
+	this->map[tileIndex.x][tileIndex.y] = tiles;
+}
+
+Tile* TileMap::GetTopTile(sf::Vector2u tileIndex)
+{
+	return this->map[tileIndex.x][tileIndex.y][3];
+}
+
+
+
 TileMap::~TileMap()
 { 
 	for (size_t x = 0; x < maxSize.x; x++)
@@ -184,71 +212,123 @@ TileMap::~TileMap()
 	}
 }
 
+
+const int TileMap::GetTileLayer() const
+{
+	return 0;
+}
+
+void TileMap::UpdateLayers(sf::Vector2u index, std::vector<Tile*> tiles)
+{
+	this->map[index.x][index.y] = tiles;
+}
+
 void TileMap::Render(sf::RenderTarget &target)
 {
 
-	for (auto& x: this->map)
+	for (int x = 0; x<this->maxSize.x; x++)
 	{
-	
-		for (auto& y : x)
+		for (int y = 0; y < this->maxSize.y; y++)
 		{
-			for (auto *z : y)
+		
+			for (int z = layers-1; z >= 0; z--)
 			{
-				if(z !=nullptr )// if the tile is not deleted or empty
-				{ 
-					
-					z->Render(target);
-					if (z->IsCollidable())
+				if (map[x][y][z] != nullptr)// if the tile is not deleted or empty
+				{
+
+					map[x][y][z]->Render(target);
+					if (map[x][y][z]->IsCollidable())
 					{
-						this->collisionRect.setPosition(z->GetPosition());
+						this->collisionRect.setPosition(map[x][y][z]->GetPosition());
 						target.draw(this->collisionRect);
 					}
-					
-					
-				
 				}
-				
-			
 			}
 		}
 	}
+	//for (auto& x: this->map)
+	//{
+	//
+	//	for (auto& y : x)
+	//	{
+	//		for (auto *z : y)
+	//		{
+	//			if(z !=nullptr )// if the tile is not deleted or empty
+	//			{ 
+	//				
+	//				z->Render(target);
+	//				if (z->IsCollidable())
+	//				{
+	//					this->collisionRect.setPosition(z->GetPosition());
+	//					target.draw(this->collisionRect);
+	//				}
+	//				
+	//			}
+	//			
+	//		
+	//		}
+	//	}
+	//}
 	
 	
 }
 
-void TileMap::RemoveTile(sf::Vector2u position)
+void TileMap::RemoveTile(sf::Vector2u position,int selectedLayer)
 {
 	sf::Vector2u gridPosition;
 	gridPosition.x = position.x / gridSizeU;
 	gridPosition.y = position.y / gridSizeU;
 	std::cout << "Removing Tile";
-	if (this->map[gridPosition.x][gridPosition.y][layers-1] != NULL)
+	if (this->map[gridPosition.x][gridPosition.y][selectedLayer -1] != NULL)
 	{
-		delete this->map[gridPosition.x][gridPosition.y][layers-1];
-		this->map[gridPosition.x][gridPosition.y][layers-1] = NULL;
+		delete this->map[gridPosition.x][gridPosition.y][selectedLayer -1];
+		this->map[gridPosition.x][gridPosition.y][selectedLayer -1] = NULL;
 	}
 }
 
-void TileMap::AddTile( sf::Texture* texture,int tileIndex, sf::Vector2u position, bool collision)
+
+void TileMap::AddTile( sf::Texture* texture,int layerNo, int tileIndex, sf::Vector2u position, bool collision)
 {
 	sf::Vector2u gridPosition;
 
 	gridPosition.x = position.x / gridSizeU;
 	gridPosition.y = position.y / gridSizeU;
 	
-	if (this->map[gridPosition.x][gridPosition.y][layers-1] != NULL)
+	Tile *tileToInsert = new Tile(texture, layerNo, position, 80, tileIndex, collision);
+
+	if (this->map[gridPosition.x][gridPosition.y][0] == NULL)
 	{
-		this->map[gridPosition.x][gridPosition.y][layers-1]->SetTexture(texture);
-		this->map[gridPosition.x][gridPosition.y][layers - 1]->SetCollision(collision);
 	
+		this->map[gridPosition.x][gridPosition.y][0] = tileToInsert;
+		return;
 	
 	}
-	else
+	int indexToDelete = -1;
+	std::vector <Tile*> tiles = this->map[gridPosition.x][gridPosition.y];
+	for (int z = 0; z < layers;z++)// find the closest empty slot and delete it
 	{
-		this->map[gridPosition.x][gridPosition.y][layers-1] = new Tile(texture,position,80, tileIndex,collision);
-		std::cout << "Adding new tile to grid" << gridPosition.x << "," << gridPosition.y << std::endl;
-	
+			if (map[gridPosition.x][gridPosition.y][z] == NULL)
+			indexToDelete = z;
+				
 	}
+	if (indexToDelete > 0)
+	{
+		tiles.erase(tiles.begin() + indexToDelete);
+		tiles.insert(tiles.begin() ,tileToInsert);
+		this->map[gridPosition.x][gridPosition.y] = tiles;
+	}
+	//for (int i = 0; i < this->layers; i++)
+	//{
+	//	
+	//	if (this->map[gridPosition.x][gridPosition.y][i] == NULL)
+	//	{
+	//		this->map[gridPosition.x][gridPosition.y][i] = new Tile(texture, layerNo, position, 80, tileIndex, collision);
+	//		//std::cout << "Adding new tile to grid" << gridPosition.x << "," << gridPosition.y << std::endl;
+	//		break;
+	//	}
+
+
+	//}
 
 		
 

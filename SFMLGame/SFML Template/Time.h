@@ -10,6 +10,7 @@ public:
 	static float time;
 	static float deltaTime;
 	static void UpdateClock();
+	static long frameCounter;
 
 };
 

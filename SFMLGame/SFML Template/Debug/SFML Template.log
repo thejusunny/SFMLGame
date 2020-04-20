@@ -1,5 +1,4 @@
-﻿  GUI.cpp
+﻿  Game.cpp
 D:\GitHub\SFMLGame\SFMLGame\SFML Template\Game.h(2,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
 D:\GitHub\SFMLGame\SFMLGame\SFML Template\CordinateConverter.h(13,2): warning C4091:  'static ': ignored on left of 'CordinateConverter' when no variable is declared
-D:\GitHub\SFMLGame\SFMLGame\SFML Template\GUI.cpp(114,25): warning C4305:  '=': truncation from 'double' to 'float'
   SFML Template.vcxproj -> D:\GitHub\SFMLGame\SFMLGame\Debug\SFMLGame.exe

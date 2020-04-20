@@ -96,13 +96,18 @@
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyboardEvent.cpp" />
+    <ClCompile Include="LoadSavePanel.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="SwitchableTab.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileEditorTabSelector.cpp" />
+    <ClCompile Include="TileEditorTools.cpp" />
+    <ClCompile Include="TileLayerSelector.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TileMapEditorState.cpp" />
-    <ClCompile Include="TileSelectorGUI.cpp" />
+    <ClCompile Include="TileSelectorPanel.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,13 +120,18 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="KeyboardEvent.h" />
+    <ClInclude Include="LoadSavePanel.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="SwitchableTab.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileEditorTabSelector.h" />
+    <ClInclude Include="TileEditorTools.h" />
+    <ClInclude Include="TileLayerSelector.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileMapEditorState.h" />
-    <ClInclude Include="TileSelectorGUI.h" />
+    <ClInclude Include="TileSelectorPanel.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>

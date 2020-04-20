@@ -1,7 +1,7 @@
-#include "TileSelectorGUI.h"
+#include "TileSelectorPanel.h"
 
 
-TileSelectorGUI::TileSelectorGUI()
+TileSelectorPanel::TileSelectorPanel()
 {
 
 	this->maxTiles = 480;
@@ -29,16 +29,18 @@ TileSelectorGUI::TileSelectorGUI()
 
 	this->InitNavigationPanel();
 	
+	this->saveTextBox = new GUI::TextBox(sf::Vector2f(1540, 650), sf::Vector2f(200, 30), sf::Color::Red, sf::Color::White, sf::Color::Black);
+	this->layerDropDownbox = new GUI::DropDownBox(std::vector<std::string>{"Layer1", "Layer2", "Layer3", "Layer4"}, sf::Vector2f(100, 30), sf::Vector2f(1540, 750));
 
 }
-TileSelectorGUI::~TileSelectorGUI()
+TileSelectorPanel::~TileSelectorPanel()
 {
 
 	for (auto& it : buttons)
 		delete& it;
 	
 }
-void TileSelectorGUI::InitFonts()
+void TileSelectorPanel::InitFonts()
 {
 	if (!this->font.loadFromFile("../Dosis-Light.ttf"))
 	{
@@ -46,7 +48,7 @@ void TileSelectorGUI::InitFonts()
 	}
 
 }
-void TileSelectorGUI::LoadTileGUITextures()
+void TileSelectorPanel::LoadTileGUITextures()
 {
 	textures.resize(this->maxTiles);
 	for (size_t i = 0; i < this->maxTiles; i++)
@@ -66,7 +68,7 @@ void TileSelectorGUI::LoadTileGUITextures()
 		}
 	}
 }
-void TileSelectorGUI::MapTexturesToTileSelectorGUI()
+void TileSelectorPanel::MapTexturesToTileSelectorGUI()
 {
 	float newPositionX;
 	this->availableTiles.resize(this->noOfPages);
@@ -88,7 +90,7 @@ void TileSelectorGUI::MapTexturesToTileSelectorGUI()
 		}
 	}
 }
-void TileSelectorGUI::InitNavigationPanel()
+void TileSelectorPanel::InitNavigationPanel()
 {
 
 	//Panel
@@ -110,7 +112,7 @@ void TileSelectorGUI::InitNavigationPanel()
 	pageNoText.setPosition(sf::Vector2f(1695, 560));
 	pageNoText.setString(std::to_string((this->currentPageIndex + 1)) + "/" + std::to_string(this->noOfPages));
 }
-void TileSelectorGUI::InitTileSelectionPanel()
+void TileSelectorPanel::InitTileSelectionPanel()
 {
 	
 	this->tileSize = sf::Vector2f(50, 50);
@@ -134,11 +136,17 @@ void TileSelectorGUI::InitTileSelectionPanel()
 	this->tileSelectorRect.setSize(sf::Vector2f(this->tileSize.x + 20, this->tileSize.y + this->tilePadding));
 
 }
-int TileSelectorGUI::GetTextureIndex()
+void TileSelectorPanel::ShowTab()
+{
+}
+void TileSelectorPanel::HideTab()
+{
+}
+int TileSelectorPanel::GetTextureIndex()
 {
 	return this->selectedTileIndex + (this->noOfCollums * this->noOfRows) * this->currentPageIndex;
 }
-void TileSelectorGUI::Update()
+void TileSelectorPanel::Update()
 {
 	sf::Vector2f relativePosition;
 	for (auto& button : buttons)
@@ -146,11 +154,12 @@ void TileSelectorGUI::Update()
 		button.second->Update(InputDevices::Mouse::GetMousePosView(&this->guiView));
 
 	}
-	
+	this->saveTextBox->Update();
+	this->layerDropDownbox->Update();
 	this->Input();
 	pageNoText.setString(std::to_string((this->currentPageIndex + 1)) + "/" + std::to_string(this->noOfPages));
 }
-void TileSelectorGUI::Render(sf::RenderTarget* target)
+void TileSelectorPanel::Render(sf::RenderTarget* target)
 {
 	target->setView(this->guiView);
 	target->draw(this->tileSelectorPanel);
@@ -162,6 +171,8 @@ void TileSelectorGUI::Render(sf::RenderTarget* target)
 	target->draw(tileSelectorNavigationPanel);
 	for (auto& button : buttons)
 		button.second->Render(target); 
+	this->saveTextBox->Render(target);
+	this->layerDropDownbox->Render(target);
 	
 
 	target->draw(this->pageNoText);
@@ -169,7 +180,7 @@ void TileSelectorGUI::Render(sf::RenderTarget* target)
 	target->draw(this->tileSelectorRect);
 
 }
-void TileSelectorGUI::Input()
+void TileSelectorPanel::Input()
 {
 	sf::Vector2f relativePosition;
 	sf::Vector2i selectedTileIndex2D;
@@ -197,25 +208,25 @@ void TileSelectorGUI::Input()
 	
 }
 
-const sf::RectangleShape TileSelectorGUI::GetSelectorPanel() const
+const sf::RectangleShape TileSelectorPanel::GetSelectorPanel() const
 {
 	return this->tileSelectorPanel;
 }
 
 
-const bool TileSelectorGUI::IsActive() const
+const bool TileSelectorPanel::IsActive() const
 {
 	return this->isActive;
 }
 
-sf::Texture* TileSelectorGUI::GetSelectedTexture()
+sf::Texture* TileSelectorPanel::GetSelectedTexture()
 {
 	
 	//std::cout << this->selectedTileIndex;
 	return &this->textures[this->selectedTileIndex+(this->noOfCollums*this->noOfRows)*this->currentPageIndex];
 }
 
-sf::Texture* TileSelectorGUI::GetTextureFromIndex(int index)
+sf::Texture* TileSelectorPanel::GetTextureFromIndex(int index)
 {
 	if(index<textures.size()-1)
 	return &this->textures[index];
@@ -224,7 +235,7 @@ sf::Texture* TileSelectorGUI::GetTextureFromIndex(int index)
 
 
 
-bool TileSelectorGUI::IsMouseEnteringPanel()
+bool TileSelectorPanel::IsMouseEnteringPanel()
 {
 	if (this->tileSelectorPanel.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()) || this->tileSelectorNavigationPanel.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()))
 		return true;
@@ -232,10 +243,20 @@ bool TileSelectorGUI::IsMouseEnteringPanel()
 	return false;
 }
 
-void TileSelectorGUI::SetActive(bool state)
+void TileSelectorPanel::SetActive(bool state)
 {
 	this->isActive = state;
 }
+
+void TileSelectorPanel::ShowTab()
+{
+}
+
+void TileSelectorPanel::HideTab()
+{
+}
+
+
 
 
 

@@ -1,7 +1,8 @@
 #pragma once
 #include "MenuState.h";
 #include "CordinateConverter.h"
-#include<stack>
+#include<stack>	
+
 class Game
 {
 private:
@@ -22,6 +23,7 @@ public :
 	void Update();
 	void Render();
 	static const std::string GetInputChar();
+
 
 };
 

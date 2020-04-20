@@ -7,7 +7,7 @@ Game::Game()
 
 	
 
-	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame");
+	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame",sf::Style::Fullscreen);
 	GUI::TextBox::SetWindow(this->renderWindow);
 	InputDevices::Mouse::Initialize(this->renderWindow);
 	CordinateConverter::Initialize(this->renderWindow);
@@ -43,6 +43,8 @@ void Game::Run()
 		ProcessWindowMessages();
 		Update();
 		Render();
+		
+		
 	
 		
 	}

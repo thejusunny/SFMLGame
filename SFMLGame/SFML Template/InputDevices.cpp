@@ -9,6 +9,8 @@ bool InputDevices::Mouse::keyFlags[2];
 sf::RenderWindow* InputDevices::Mouse::window;
 float InputDevices::Mouse::timeOfLastKeyPress;
 float InputDevices::Mouse::timeSinceLastKeyPress;
+long InputDevices::Mouse::lastFrameNo;
+
 InputDevices::Mouse::~Mouse()
 {
 	delete window;
@@ -48,6 +50,7 @@ bool InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Button button)
 
 	bool isPressed = sf::Mouse::isButtonPressed(button);
 	timeSinceLastKeyPress = Time::time - timeOfLastKeyPress;
+	
 
 	if (keyFlags[button] == false && isPressed)
 	{
@@ -55,7 +58,7 @@ bool InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Button button)
 		keyDownStates[button] = true;
 		timeOfLastKeyPress = Time::time;
 	}
-	else if (timeSinceLastKeyPress >= Time::deltaTime)
+	else if (Time::frameCounter>lastFrameNo) /*timeSinceLastKeyPress >= Time::deltaTime*/
 	{
 		keyDownStates[button] = false;
 
@@ -65,7 +68,7 @@ bool InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Button button)
 	{
 		keyFlags[button] = false;
 	}
-
+	lastFrameNo = Time::frameCounter;
 	return keyDownStates[button];
 
 }

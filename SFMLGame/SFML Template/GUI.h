@@ -3,8 +3,9 @@
 #include"InputDevices.h"
 enum ButtonState
 {
-	IDLE = 0, HOVER, PRESSED
+	IDLE = 0, HOVER, PRESSED ,TOGGLED,DISABLED
 };
+
 namespace GUI
 {
 	class Button
@@ -16,13 +17,24 @@ namespace GUI
 		sf::Color idleColor;
 		sf::Color hoverColor;
 		sf::Color pressColor;
+		sf::Color disabledColor;
 		short unsigned buttonState;
+		float buttonPressDeltaTime;
+		float lastPressTime;
+		bool isActive;
+		bool enabled;
+
 	public:
+		void SetButtonText(std::string text);
+		const std::string GetButtonText()const;
+
+		void SetActive(bool state);
 		Button(sf::Vector2f position, sf::Vector2f buttonSize, sf::Font* font, std::string text,
-			sf::Color idleColor, sf::Color hoverColor, sf::Color clickColor);
+			sf::Color idleColor, sf::Color hoverColor, sf::Color clickColor, int fontSize =18);
 		void Render(sf::RenderTarget* target);
 		void Update(const sf::Vector2f mousePosition);
 		const bool IsPressed()const;
+		void SetEnabled(bool state);
 	};
 
 	class TextBox
@@ -34,7 +46,6 @@ namespace GUI
 		sf::Color textColor;
 		static sf::RenderWindow* window;
 		std::string stringText;
-		void PollTextInput();
 		bool isSelectionActive;
 		sf::Font font;
 		float deleteFreq;
@@ -57,9 +68,19 @@ namespace GUI
 	class DropDownBox
 	{
 	public:
+		DropDownBox(std::vector<std::string> options, sf::Vector2f size, sf::Vector2f postion);
 		std::vector<Button*> options;
+		Button* selectedButton;
+		sf::RectangleShape dropDownRect;
+		void Update();
+		void Render(sf::RenderTarget* target);
+		const std::string GetCurrentSelectedString()const;
+		const int GetCurrentSelectedIndex()const;
+		~DropDownBox();
 	private:
-
+		sf::Vector2f optionSize;
+		bool isExpanded;
+		sf::Font font;
 		int currentSelectedIndex;
 	};
 

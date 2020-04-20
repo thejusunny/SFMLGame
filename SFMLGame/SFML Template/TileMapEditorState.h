@@ -1,6 +1,6 @@
 #pragma once
 #include "State.h"
-#include "TileSelectorGUI.h"
+#include "TileEditorTabSelector.h"
 #include "Keyboard.h"
 
 class TextBox;
@@ -11,19 +11,19 @@ protected:
 	TileMap *map;
 	sf::RectangleShape gridSelectionRect;
 	float gridSize;
-	TileSelectorGUI tileSelectorGUI;
+	TileEditorTabSelector *tileEditorTabSelector;
 	std::map<std::string, GUI::Button*> buttons;
 	sf::Font font;
 	float viewMoveSpeed;
 	sf::RectangleShape sidePanel;
 	sf::View mapView;
-	sf::Text selectionHeaderText;
 	bool collision;
 	std::string mouseInfoStr;
 	std::string tileInfoStr;
 	sf::Text mouseInformationText;
 	sf::Text tileInformationText;
 	GUI::TextBox *saveTextBox;
+	GUI::DropDownBox* layerDropDownbox;
 public :
 	
 	TileMapEditorState();

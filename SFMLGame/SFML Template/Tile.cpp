@@ -3,9 +3,10 @@
 #include<stdlib.h>
 
 
-Tile::Tile(sf::Texture* texture, sf::Vector2u tilePosition, float gridSizeF, int textureIndex,bool collision=false)
+Tile::Tile(sf::Texture* texture, int layerNo,sf::Vector2u tilePosition, float gridSizeF, int textureIndex,bool collision=false)
 {
 	this->tileShape.setSize(sf::Vector2f( gridSizeF,gridSizeF));
+	this->layerNo = layerNo;
 	this->collision = collision;
 	this->texture = texture;
 
@@ -38,6 +39,11 @@ void Tile::Render(sf::RenderTarget& target)
 void Tile::SetTexture(sf::Texture* texture)
 {
 	this->tileShape.setTexture(texture);
+}
+
+sf::Texture* Tile::GetTexture()
+{
+	return this->texture;
 }
 
 std::string Tile::GetTileInfoAsString()
