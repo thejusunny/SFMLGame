@@ -9,16 +9,31 @@ TileEditorTools::TileEditorTools(TileMap *map, TileSelectorPanel *tileSelector,s
 	{
 		std::cout << "Error";
 	}
+	toolHeaderText.setFont(this->font);
+	toolHeaderText.setString("TOOLS");
+	toolHeaderText.setCharacterSize(20);
+	toolHeaderText.setFillColor(sf::Color::White);
+	if (selectToolTex.loadFromFile("../Textures/SelectToolIcon.png"))
+	{
+		std::cout << "Error loading texture";
+	}
+	if (painToolTex.loadFromFile("../Textures/PaintToolIcon.png"))
+	{
+		std::cout << "Error loading texture";
+	}
+
 	this->map = map;
-	this->gridSelectionRect.setFillColor(sf::Color::Transparent);
+	this->gridSelectionRect.setFillColor(sf::Color(255,255,255,100));
 	this->gridSelectionRect.setOutlineColor(sf::Color::Green);
 	this->gridSelectionRect.setSize(this->map->GetGridSizeF() * sf::Vector2f(1.f, 1.f));
 	this->gridSelectionRect.setOutlineThickness(1.f);
 	this->currentSelectedTool = ToolType::PAINT;
-	this->toolButtons["paint"] = new GUI::Button(sf::Vector2f(1510, 930), sf::Vector2f(60, 35), &this->font, "PAINT", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	this->toolButtons["select"] = new GUI::Button(sf::Vector2f(1630, 930), sf::Vector2f(60, 35), &this->font, "SELECT", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	this->currentSelectedTool = ToolType::SELECT;
-
+	this->toolHeaderText.setPosition(1560, 905);
+	this->toolHeaderText.setStyle(sf::Text::Bold);
+	this->toolButtons["Paint"] = new GUI::Button(sf::Vector2f(1510, 930), sf::Vector2f(50, 50), &this->font, "", sf::Color::White, sf::Color::Cyan, sf::Color::Red,0,&painToolTex);
+	this->toolButtons["Select"] = new GUI::Button(sf::Vector2f(1630, 930), sf::Vector2f(50, 50), &this->font, "", sf::Color::White, sf::Color::Cyan, sf::Color::Red,0,&selectToolTex);
+	this->currentSelectedTool = ToolType::SELECT; 
+	this->layerDropDownBox  = new GUI::DropDownBox(std::vector<std::string>{"Layer1", "Layer2", "Thej","The","Thejus", "Layer6"}, sf::Vector2f(100, 30), sf::Vector2f(1700, 750), true);
 }
 
 void TileEditorTools::Update()
@@ -29,7 +44,7 @@ void TileEditorTools::Update()
 		button.second->Update(InputDevices::Mouse::GetMousePosWindowf());
 
 	}
-
+	this->layerDropDownBox->Update();
 	this->Input();
 }
 
@@ -41,6 +56,8 @@ void TileEditorTools::Render(sf::RenderTarget* target)
 	target->setView(tileSelectorPanel->guiView);
 	for (auto& btn : toolButtons)
 		btn.second->Render(target);
+	target->draw(this->toolHeaderText);
+	this->layerDropDownBox->Render(target);
 }
 
 sf::Vector2u TileEditorTools::GetGridSelectedIndex()
@@ -48,19 +65,31 @@ sf::Vector2u TileEditorTools::GetGridSelectedIndex()
 	return sf::Vector2u( static_cast<int>(this->gridSelectionRect.getPosition().x / this->map->GetGridSizeF()),static_cast<int>(this->gridSelectionRect.getPosition().y / this->map->GetGridSizeF()));
 }
 
+void TileEditorTools::SetSelectorRect(sf::Texture* tex)
+{
+	this->gridSelectionRect.setTexture(tex);
+}
+
 void TileEditorTools::Input()
 {
 	
 
-	if (this->toolButtons["paint"]->IsPressed())
+	if (this->toolButtons["Paint"]->IsPressed())
 	{
 		this->currentSelectedTool = ToolType::PAINT;
 		this->gridSelectionRect.setOutlineColor(sf::Color::Red);
+		this->gridSelectionRect.setFillColor(sf::Color(255, 255, 255, 100));
+		this->toolButtons["Select"]->SetEnabled(true);
+		this->toolButtons["Paint"]->SetEnabled(false);
+		
 	}
-	else if (this->toolButtons["select"]->IsPressed())
+	else if (this->toolButtons["Select"]->IsPressed())
 	{
 		this->currentSelectedTool = ToolType::SELECT;
 		this->gridSelectionRect.setOutlineColor(sf::Color::Green);
+		this->gridSelectionRect.setFillColor(sf::Color::Transparent);
+		this->toolButtons["Select"]->SetEnabled(false);
+		this->toolButtons["Paint"]->SetEnabled(true);
 
 	}
 	sf::Vector2f mouseViewPos = InputDevices::Mouse::GetMousePosView(this->map->GetMapView());
@@ -80,7 +109,7 @@ void TileEditorTools::Input()
 					(int)mouseViewPos.y / (int)map->GetGridSizeF() * this->map->GetGridSizeF());
 				if (currentTilepos != prevPaintTilepos)
 				{
-					this->map->AddTile(tileSelectorPanel->GetSelectedTexture(), tileSelectorPanel->layerDropDownbox->GetCurrentSelectedIndex() + 1, tileSelectorPanel->GetTextureIndex(), sf::Vector2u(this->gridSelectionRect.getPosition().x, this->gridSelectionRect.getPosition().y), false);
+					this->map->AddTile(tileSelectorPanel->GetSelectedTexture(), 1, tileSelectorPanel->GetTextureIndex(), sf::Vector2u(this->gridSelectionRect.getPosition().x, this->gridSelectionRect.getPosition().y), false);
 					prevPaintTilepos = currentTilepos;
 				}
 

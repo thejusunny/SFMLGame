@@ -2,20 +2,21 @@
 std::string Game::inputString;
 float Game::timeOflastClear;
 float Game::timeSinceLastFrame;
+
+void Game::ClearInputBuffer()
+{
+	inputString = "";
+}
 Game::Game()
 {
 
-	
-
-	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame",sf::Style::Fullscreen);
+	this->renderWindow = new sf::RenderWindow(sf::VideoMode(1920, 1080), "MyGame",sf::Style::Default);
 	GUI::TextBox::SetWindow(this->renderWindow);
 	InputDevices::Mouse::Initialize(this->renderWindow);
-	CordinateConverter::Initialize(this->renderWindow);
+	CordinateConverter::Initialize(this->renderWindow); 
 	inputString = "";
 	states.push(new MenuState(&this->states));
 
-
-	
 }
 
 Game::~Game()
@@ -43,7 +44,7 @@ void Game::Run()
 		ProcessWindowMessages();
 		Update();
 		Render();
-		
+		ClearInputBuffer();
 		
 	
 		
@@ -118,3 +119,4 @@ Game::GetInputChar()
 	}*/
 	return temp;
 }
+

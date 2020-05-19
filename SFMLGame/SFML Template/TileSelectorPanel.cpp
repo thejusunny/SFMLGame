@@ -31,7 +31,7 @@ TileSelectorPanel::TileSelectorPanel(TileMap *map,  sf::RectangleShape* tabSelec
 	
 	this->layerSelector = new TileLayerSelector(map);
 	this->tileEditorTools = new TileEditorTools(map,this,tabSelectorMask);
-	this->layerDropDownbox = new GUI::DropDownBox(std::vector<std::string>{"Layer1", "Layer2", "Layer3", "Layer4"}, sf::Vector2f(100, 30), sf::Vector2f(1540, 750));
+
 
 }
 TileSelectorPanel::~TileSelectorPanel()
@@ -155,8 +155,7 @@ void TileSelectorPanel::Update()
 	}
 	layerSelector->Update();
 	tileEditorTools->Update();
-	/*this->saveTextBox->Update();
-	this->layerDropDownbox->Update();*/
+
 	this->Input();
 	pageNoText.setString(std::to_string((this->currentPageIndex + 1)) + "/" + std::to_string(this->noOfPages));
 }
@@ -174,8 +173,7 @@ void TileSelectorPanel::Render(sf::RenderTarget* target)
 		button.second->Render(target); 
 	this->layerSelector->Render(target);
 	this->tileEditorTools->Render(target);
-	/*this->saveTextBox->Render(target);
-	this->layerDropDownbox->Render(target);*/
+
 	
 
 	target->draw(this->pageNoText);
@@ -201,6 +199,7 @@ void TileSelectorPanel::Input()
 			this->selectedTileIndex = ((selectedTileIndex2D.y * this->noOfCollums) + selectedTileIndex2D.x);
 			//std::cout << this->selectedTileIndex;
 			this->tileSelectorRect.setPosition(relativePosition);
+			this->tileEditorTools->SetSelectorRect(GetSelectedTexture());
 
 		}
 	}

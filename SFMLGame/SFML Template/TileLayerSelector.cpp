@@ -23,8 +23,10 @@ TileLayerSelector::TileLayerSelector(TileMap *map)
 		this->tileIcons[i].setOutlineColor(sf::Color::Black);
 		this->tileIcons[i].setOutlineThickness(1.f);
 		this->tileIcons[i].setFillColor(sf::Color(255, 255, 255, 150));
-
+	
 	}
+	
+	
 
 	this->selectedRect.setOutlineColor(sf::Color::White);
 	this->selectedRect.setOutlineThickness(1.f);
@@ -66,7 +68,7 @@ void TileLayerSelector::UpdateLayerPanel(std::vector<Tile*> tiles,sf::Vector2u t
 void Layer::Render(sf::RenderTarget* target)
 {
 	target->draw(layerRects);
-	target->draw(tileType);
+	//target->draw(tileType);
 	target->draw(layerName);
 }
 void TileLayerSelector::Update()
@@ -85,6 +87,7 @@ void TileLayerSelector::Render(sf::RenderTarget* target)
 		i->Render(target);
 	if(iconSelected)
 	target->draw(this->selectedRect);
+
 }
 void TileLayerSelector::Input()
 {
@@ -141,54 +144,6 @@ void TileLayerSelector::Input()
 					
 
 
-						//if (isLayerBoxFull)// If layer box is full swap the icons
-						//{
-						//	tileBuffer[mouseHeldIndex] = tileBuffer[i];
-						//	tileBuffer[i] = tileToMove;
-
-
-						//}
-						//else// move it up and down
-						//{
-						//	
-						//		
-						//		if (tileBuffer[i] != NULL)// if target tile is not empty then move it 
-						//		{
-						//			int indexToDelete = -1;
-						//			for (int x = i; x < tileBuffer.size();x++)// find the closest empty slot and delete it
-						//			{
-						//				if (tileBuffer[x] == NULL)
-						//					indexToDelete = x;
-						//			
-						//			}
-						//			if (indexToDelete > 0)
-						//			{
-						//				tileBuffer[mouseHeldIndex] = NULL;
-						//				tileBuffer.erase(tileBuffer.begin() + indexToDelete);
-						//				tileBuffer.insert(tileBuffer.begin() + i, tileToMove);
-						//			}
-						//			//else
-						//			//tileBuffer.insert(tileBuffer.begin() + i, tileToMove);
-						//			////tileBuffer.erase(tileBuffer.begin() + mouseHeldIndex);
-						//			//tileBuffer.erase(tileBuffer.begin() + tileIcons.size());
-						//		}
-						//		else
-						//		{// replace the empty tile 
-						//			tileBuffer[mouseHeldIndex] = NULL;
-						//			tileBuffer[i] = tileToMove;
-						//		}
-						//
-						//}
-						//for (int i = 0; i < tileBuffer.size(); i++)
-						//{
-						//	tileIcons[i].setTexture(NULL);
-						//	if (tileBuffer[i] != NULL)
-						//	{
-						//		this->tileIcons[i].setFillColor(sf::Color(255, 255, 255));
-						//		tileIcons[i].setTexture(tileBuffer[i]->GetTexture());
-
-						//	}
-						//}
 						this->UpdateLayerIcons();
 						selectedRect.setTexture(NULL);
 						this->map->UpdateLayers(tileIndex, tileBuffer);
@@ -209,16 +164,23 @@ void TileLayerSelector::Input()
 Layer::Layer(int layerIndex, sf::Vector2f layerRectPos,sf::Vector2f layerRectSize,sf::Font &font)
 {
 	
-	
+
 	this->layerRects.setPosition(layerRectPos);
+	
 	this->layerRects.setSize(layerRectSize);
-	this->layerRects.setOutlineColor(sf::Color::Green);
+	this->layerRects.setOutlineColor(sf::Color::Black);
 	this->layerRects.setOutlineThickness(1.f);
 
 	this->layerRects.setFillColor(sf::Color(200, 0, 0, 150));
 	this->tileType.setFont(font);
+
+
+	this->layerName.setCharacterSize(20);
+	this->layerName.setPosition(sf::Vector2f(4,4)+ layerRectPos);
 	this->layerName.setFont(font);
-	this->layerName.setString("Layer " + (layerIndex+1));
+	this->layerName.setFillColor(sf::Color::White);
+	this->layerName.setFont(font);
+	this->layerName.setString("Layer " + std::to_string(layerIndex+1));// std::stoi to str->int
 	this->tileType.setString("None");
 	
 	

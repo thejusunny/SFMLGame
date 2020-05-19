@@ -10,6 +10,7 @@ public :
 	void Render(sf::RenderTarget* target);
 	Layer(int layerIndex, sf::Vector2f layerRectPos, sf::Vector2f layerRectSize,sf::Font &font);
 private:
+
 	sf::RectangleShape layerRects;
 	sf::Text layerName;
 };
@@ -26,7 +27,6 @@ private:
 	sf::RectangleShape mainPanel;
 	std::vector<Layer*> layers;
 	std::vector<sf::RectangleShape> tileIcons;
-
 	TileMap* map;
 	sf::RectangleShape selectedRect;
 	int currentSelectedLayer;

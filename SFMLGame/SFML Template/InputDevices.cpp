@@ -10,6 +10,8 @@ sf::RenderWindow* InputDevices::Mouse::window;
 float InputDevices::Mouse::timeOfLastKeyPress;
 float InputDevices::Mouse::timeSinceLastKeyPress;
 long InputDevices::Mouse::lastFrameNo;
+sf::Vector2f InputDevices::Mouse::lastMousePosition = sf::Vector2f(0,0);
+sf::Vector2f InputDevices::Mouse::mousePosCurrent = sf::Vector2f(0, 0);
 
 InputDevices::Mouse::~Mouse()
 {
@@ -42,6 +44,29 @@ const sf::Vector2i InputDevices::Mouse::GetMousePosWindowFromView(sf::Vector2f p
 {
 
 	return window->mapCoordsToPixel(pos, *view);// view to window
+}
+
+const sf::Vector2f InputDevices::Mouse::GetMouseDelta()
+{
+	
+	sf::Vector2f directionDelta = GetMousePosWindowf() - lastMousePosition;
+	float magnitude = sqrt(pow(directionDelta.x, 2) + pow(directionDelta.y, 2));
+	
+	//if (directionDelta.x != 0 && directionDelta.y != 0)
+	//	directionDelta /= magnitude;
+	//else
+	//	return sf::Vector2f(0, 0);
+	if (lastMousePosition != GetMousePosWindowf())
+		lastMousePosition = GetMousePosWindowf();
+
+	return directionDelta;
+}
+
+const float InputDevices::Mouse::GetMouseSpeedVertical()
+{
+	sf::Vector2f currentSpeed = (GetMousePosWindowf() - mousePosCurrent);
+	mousePosCurrent = GetMousePosWindowf();
+	return abs(currentSpeed.y);
 }
 
 

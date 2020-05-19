@@ -1,5 +1,11 @@
 #include "GUI.h"
 
+void GUI::Button::UpdateTextAnchors()
+{
+	this->text.setPosition(this->buttonShape.getPosition().x + (this->buttonShape.getGlobalBounds().width / 2.f) - this->text.getGlobalBounds().width / 2.f,
+		this->buttonShape.getPosition().y + (this->buttonShape.getGlobalBounds().height / 2.f) - 3 - this->text.getGlobalBounds().height / 2.f);
+}
+
 void GUI::Button::SetButtonText(std::string text)
 {
 	this->text.setString(text);
@@ -8,23 +14,30 @@ void GUI::Button::SetButtonText(std::string text)
 
 }
 
-const std::string GUI::Button::GetButtonText() const
+std::string GUI::Button::GetButtonText() const
 {
 	return this->text.getString();
 }
 
-void GUI::Button::SetActive(bool state)
+void GUI::Button::SetPosition(sf::Vector2f pos)
+{
+	buttonShape.setPosition(pos);
+	UpdateTextAnchors();
+}
+
+void GUI::Button::SetActive(bool state) 
 {
 	this->isActive = state;
 }
 
 /*Button */
 GUI::Button::Button(sf::Vector2f position, sf::Vector2f buttonSize, sf::Font* font, std::string text,
-	sf::Color idleColor, sf::Color hoverColor, sf::Color clickColor,int fontSize)
+	sf::Color idleColor, sf::Color hoverColor, sf::Color clickColor,int fontSize,sf::Texture *tex)
 {
 	this->isActive = true;
 	this->enabled = true;
-	this->buttonPressDeltaTime = 0.1f;
+	this->buttonTexture = tex;
+	this->buttonPressDeltaTime = 0.15f;
 	this->buttonShape.setPosition(position);
 	this->buttonShape.setSize(buttonSize);
 	this->font = font;
@@ -34,12 +47,14 @@ GUI::Button::Button(sf::Vector2f position, sf::Vector2f buttonSize, sf::Font* fo
 	this->text.setCharacterSize(fontSize);
 	this->buttonState = ButtonState::IDLE;
 	this->disabledColor = sf::Color(255, 0, 0);
-	this->text.setPosition(this->buttonShape.getPosition().x + (this->buttonShape.getGlobalBounds().width / 2.f) - this->text.getGlobalBounds().width / 2.f,
-		this->buttonShape.getPosition().y + (this->buttonShape.getGlobalBounds().height / 2.f)-3 - this->text.getGlobalBounds().height / 2.f);
+	this->UpdateTextAnchors();
 	this->idleColor = idleColor;
 	this->hoverColor = hoverColor;
 	this->pressColor = clickColor;
 	this->buttonShape.setFillColor(idleColor);
+	this->buttonShape.setTexture(buttonTexture);
+	this->buttonShape.setOutlineThickness(1.0);
+	this->buttonShape.setOutlineColor(sf::Color::White);
 }
 
 void GUI::Button::Render(sf::RenderTarget* target)
@@ -108,6 +123,11 @@ void GUI::Button::SetEnabled(bool state)
 	buttonState = this->enabled ? buttonState : ButtonState::DISABLED;
 }
 
+auto GUI::Button::GetRect()
+{
+	return this->buttonShape.getGlobalBounds();
+}
+
 
 //TextBox
 #include "Game.h"
@@ -118,6 +138,17 @@ sf::RenderWindow* GUI::TextBox::window;
 bool  GUI::TextBox::IsTextInBounds()
 {
 	return (this->text.findCharacterPos(cursorIndex - 1).x < this->textRectShape.getPosition().x + this->textRectShape.getGlobalBounds().width - 12);
+}
+
+void GUI::TextBox::UpdateCursor()
+{
+	if (cursorIndex <= 0)
+	{
+		this->cursor.setPosition(this->textRectShape.getPosition().x, this->textRectShape.getPosition().y+1);
+		return;
+	}
+	
+	this->cursor.setPosition(this->text.findCharacterPos(cursorIndex).x, this->textRectShape.getPosition().y + 1);
 }
 
 const std::string GUI::TextBox::GetText() const
@@ -147,15 +178,19 @@ GUI::TextBox::TextBox(sf::Vector2f position, sf::Vector2f textRectSize, sf::Colo
 	this->text.setFont(this->font);
 	this->text.setFillColor(this->textColor);
 	this->text.setString(defaultText);
+	this->stringText = defaultText;
+	this->cursorIndex = defaultText.length();
 	this->characterWidthOffset = (fontSize / 2) + this->text.getLetterSpacing(); // with the letterspacing
 	this->text.setCharacterSize(this->fontSize);
 	this->textRectShape.setOutlineColor(borderColor);
 	this->textRectShape.setOutlineThickness(1.f);
 	this->textRectShape.setPosition(position);
-	this->text.setPosition(this->textRectShape.getPosition().x, this->textRectShape.getPosition().y + 3 + this->text.getGlobalBounds().height / 2.f);
-	this->cursor.setSize(sf::Vector2f(1, this->textRectShape.getSize().y - 7));
+	float height = this->text.getLocalBounds().height;
+	this->text.setPosition(this->textRectShape.getPosition().x, (this->textRectShape.getPosition().y  + ((this->textRectShape.getSize().y - this->text.getLocalBounds().height)/2)-1 ));
+	this->cursor.setSize(sf::Vector2f(1, this->textRectShape.getSize().y-2));
 	this->cursor.setFillColor(sf::Color::Black);
-	this->cursor.setPosition((this->textRectShape.getPosition().x + this->cursorIndex * this->characterWidthOffset), this->textRectShape.getPosition().y + 1);
+	this->UpdateCursor();
+	//this->cursor.setPosition((this->textRectShape.getPosition().x + this->cursorIndex * this->characterWidthOffset), this->textRectShape.getPosition().y + 1);
 	std::cout << "Letter spacing:" << this->text.getLetterSpacing() << std::endl;
 	//this->cursor.setOutlineThickness(1.f);
 	//this->cursor.setOutlineColor(sf::Color::Blue);
@@ -163,12 +198,37 @@ GUI::TextBox::TextBox(sf::Vector2f position, sf::Vector2f textRectSize, sf::Colo
 
 void  GUI::TextBox::Update()
 {
+	
+	
 	if (InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Left))
 	{
 
 
 		if (this->textRectShape.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()))
+		{
 			this->isSelectionActive = true;
+			if (cursorIndex >= 0)
+			{
+				std::cout << InputDevices::Mouse::GetMousePosWindowf().x;
+				float startPositionX = this->textRectShape.getPosition().x;
+				float mousePosX = InputDevices::Mouse::GetMousePosWindowf().x;
+				int targetIndex = 0;
+				for (int i = 0; i <= stringText.length(); i++)
+				{
+					if (mousePosX >= this->text.findCharacterPos(i).x-0.1f)
+						targetIndex = i;
+				}
+			
+
+				if (targetIndex <= stringText.length()+1)
+				{
+					cursorIndex = targetIndex;
+					this->UpdateCursor();
+				}
+
+			}
+			
+		}
 		else
 			isSelectionActive = false;
 
@@ -179,37 +239,42 @@ void  GUI::TextBox::Update()
 		if (inputChar != "")
 		{
 
-			this->stringText += inputChar;
+			this->stringText.insert(cursorIndex,inputChar);
+			//this->stringText += inputChar;
 			this->cursorIndex++;
 			if (this->IsTextInBounds())
 			{
 				this->text.setString(stringText);
-				this->cursor.setPosition(this->text.findCharacterPos(cursorIndex).x, this->textRectShape.getPosition().y + 3);
+				this->UpdateCursor();
 			}
 
 		}
 		this->textRectShape.setOutlineColor(sf::Color(255, 0, 0, 255));
 
+		if (InputDevices::Keyboard::IsKeyPressed(sf::Keyboard::BackSpace) && Time::time > timer + deleteFreq)
+		{
+
+
+			if (cursorIndex > 0)
+			{
+				unsigned count = stringText.length();
+				this->stringText = this->stringText.substr(0, count - 1);
+				--cursorIndex;
+				if (this->IsTextInBounds())
+				{
+					this->text.setString(stringText);
+					this->cursor.setPosition(this->text.findCharacterPos(cursorIndex).x, this->textRectShape.getPosition().y + 3);
+				}
+				timer = Time::time;
+			}
+		}
+
 	}
 	else
-		this->textRectShape.setOutlineColor(sf::Color::Black);
-	if (InputDevices::Keyboard::IsKeyPressed(sf::Keyboard::BackSpace) && Time::time > timer + deleteFreq)
 	{
-
-		
-		if (cursorIndex > 0)
-		{
-			unsigned count = stringText.length();
-			this->stringText = this->stringText.substr(0, count - 1);
-			--cursorIndex;
-			if (this->IsTextInBounds())
-			{
-				this->text.setString(stringText);
-				this->cursor.setPosition(this->text.findCharacterPos(cursorIndex).x, this->textRectShape.getPosition().y + 3);
-			}
-			timer = Time::time;
-		}
+		this->textRectShape.setOutlineColor(sf::Color::Black);
 	}
+	
 
 
 }
@@ -228,34 +293,141 @@ void  GUI::TextBox::SetWindow(sf::RenderWindow* win)
 	window = win;
 }
 
-GUI::DropDownBox::DropDownBox(std::vector<std::string> optionStrings,sf::Vector2f size, sf::Vector2f postion)
+GUI::DropDownBox::DropDownBox(std::vector<std::string> optionStrings,sf::Vector2f size, sf::Vector2f postion,bool useSearchBox)
 {
 	this->currentSelectedIndex = 0;
 	this->isExpanded = false;
 	this->optionSize = size;
+	this->noOfVisibleButtons = 4;
+	this->isScrollHeld = false;
+	if (useSearchBox)
+	{
+		startOffset.y = size.y;
+		searchBox = new TextBox(postion+startOffset, sf::Vector2f(size.x, size.y), sf::Color::Red, sf::Color::White, sf::Color::Black);
+		
+
+	}
 	if (!this->font.loadFromFile("../Dosis-Light.ttf"))
 	{
 		std::cout << "Error";
 	}
+	this->searchOptions.resize(optionStrings.size());
 	//TODO
 	// the first one is always supposed to be enter box not included in the list
-	
-	selectedButton =  new Button(sf::Vector2f(postion.x, postion.y), size, &this->font, "Empty", sf::Color::White, sf::Color::Blue, sf::Color::Red);
+
+	this->optionStartPos = postion + startOffset + sf::Vector2f(0, size.y);
+	this->dropDownRect.setPosition(optionStartPos);
+	this->dropDownRect.setSize(sf::Vector2f(size.x, size.y * noOfVisibleButtons ));
+	this->dropDownRect.setFillColor(sf::Color(128, 128, 128));
+	this->scrollBarRect.setSize(sf::Vector2f(15, dropDownRect.getSize().y+size.y+startOffset.y));
+	this->scrollBarRect.setPosition(sf::Vector2f(postion.x + size.x, postion.y));
+	this->scrollRect.setPosition(this->scrollBarRect.getPosition());
+	this->scrollBarRect.setFillColor(sf::Color::Black);
+	this->scrollRect.setFillColor(sf::Color::Red);
+	selectedButton =  new Button(postion, size, &this->font, "Empty", sf::Color::White, sf::Color::Blue, sf::Color::Red);
 	selectedButton->SetActive(true);
 	options.resize(optionStrings.size());
 	for (int i = 0; i < optionStrings.size(); i++)
 	{
-		this->options[i] = new Button(sf::Vector2f(postion.x,postion.y+((i+1)*size.y)), size, &this->font,optionStrings[i], sf::Color::White, sf::Color::Blue,sf::Color::Red);
+		this->options[i] = new Button(startOffset+ sf::Vector2f(postion.x,postion.y+((i+1)*size.y)), size, &this->font,optionStrings[i], sf::Color::White, sf::Color::Blue,sf::Color::Red);
 	}
 
-	this->dropDownRect.setPosition(postion);
-	this->dropDownRect.setSize(sf::Vector2f( size.x, size.y * optionStrings.size()));
+	this->currentHeightRatio = dropDownRect.getSize().y / options.size() + 1;
+	this->normalView.setSize(sf::Vector2f(1920, 1080));
+	this->normalView.setCenter(this->normalView.getSize()/ 2.f);
+	sf::Vector2f dropDownSize = dropDownRect.getSize();
+	this->scrollView.setSize(dropDownSize);
+
+	dropDownSize.x /= 2.0;
+	dropDownSize.y /= 2.0;
+	this->scrollView.setCenter(dropDownRect.getPosition() + dropDownSize);
+	sf::Vector2f viewPort = dropDownRect.getSize();
+	viewPort.x /= 1920;
+	viewPort.y /= 1080;
+	this->scrollView.setViewport(sf::FloatRect((dropDownRect.getPosition().x)/1920,dropDownRect.getPosition().y/1080, viewPort.x, viewPort.y));
+	this->dropDownRect.setOutlineThickness(1.f);
+	this->dropDownRect.setOutlineColor(sf::Color::Red);
 
 	
 }
 
 void GUI::DropDownBox::Update()
 {
+	
+	searchOptions.clear();
+	std::string searchText = this->searchBox->GetText();
+	if (searchText!=" ")
+	{
+		//Search algorithm
+
+		
+		isSearching = true;
+		for (int i = 0; i < options.size(); i++)
+		{
+			std::string btn = options[i]->GetButtonText();
+			if (strstr(btn.c_str(),searchText.c_str() ))
+			{
+				this->searchOptions.push_back(options[i]);
+				
+				
+			}
+		}
+		for (int i = 0; i < this->searchOptions.size(); i++)
+		{
+			this->searchOptions[i]->SetPosition(sf::Vector2f(optionStartPos.x, optionStartPos.y + (i * optionSize.y)));
+		}
+		currentHeightRatio = static_cast<float>(noOfVisibleButtons) / searchOptions.size();
+	}
+	else
+	{
+		currentHeightRatio = static_cast<float>(noOfVisibleButtons) / options.size();
+		isSearching = false;
+	}
+	if (currentHeightRatio < 1)
+	{
+
+		scrollRect.setSize(sf::Vector2f(scrollBarRect.getSize().x, scrollBarRect.getSize().y * currentHeightRatio));
+		isScrollBarVisible = true;
+
+
+	}
+	else
+		isScrollBarVisible = false;
+	if (this->isScrollBarVisible)
+	{
+
+		if (InputDevices::Mouse::GetMouseKeyPress(sf::Mouse::Left))
+		{
+			if (this->scrollBarRect.getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()))
+			{
+				this->isScrollHeld = true;
+			}
+		}
+		else
+			isScrollHeld = false;
+
+		if (this->isScrollHeld)
+		{
+			// bounds for the rectscroll bar 
+			float mouseDeltaY = InputDevices::Mouse::GetMouseDelta().y;
+			scrollRect.move(sf::Vector2f(0, mouseDeltaY));
+			sf::Vector2f position = scrollRect.getPosition();
+
+			scrollView.move(sf::Vector2f(0, mouseDeltaY));
+			sf::Vector2f scrollViewCenter= scrollView.getCenter();
+
+			scrollViewCenter.y = Clamp(scrollViewCenter.y, dropDownRect.getPosition().y+ dropDownRect.getSize().y/2, dropDownRect.getPosition().y+ dropDownRect.getSize().y / 2+ (options.size()-noOfVisibleButtons)* optionSize.y);
+			scrollView.setCenter(scrollViewCenter);
+			//std::cout << scrollView.getCenter().y << std::endl;
+
+			position.y = Clamp(position.y, scrollBarRect.getPosition().y, scrollBarRect.getPosition().y+(scrollBarRect.getSize().y*(1-currentHeightRatio)));
+			scrollRect.setPosition(position);
+		
+			
+		}
+
+	
+	}
 	this->selectedButton->Update(InputDevices::Mouse::GetMousePosWindowf());
 	if (this->selectedButton->IsPressed())
 	{
@@ -263,22 +435,33 @@ void GUI::DropDownBox::Update()
 		std::cout << "pressed\n";
 
 	}
+
 	
 	if(this->isExpanded)
 	{
-	
-
+		
+		if (this->searchBox!= NULL)
+		this->searchBox->Update();
 		for (int i=0;i<options.size();i++)
 		{
-			
-			options[i]->Update(InputDevices::Mouse::GetMousePosWindowf());
-			if (options[i]->IsPressed())
+			//PROBLEM - options outside view fructum still gets selected check with  bounds to solve that
+
+			sf::FloatRect viewRect(scrollView.getCenter() - scrollView.getSize() / 2.f, scrollView.getSize());
+		
+			if (viewRect.intersects(options[i]->GetRect()))
 			{
-				
-				this->selectedButton->SetButtonText(options[i]->GetButtonText());
-				this->currentSelectedIndex = i;
-				this->isExpanded = false;
+				options[i]->Update(InputDevices::Mouse::GetMousePosView(&scrollView));
+				if (options[i]->IsPressed())
+				{
+
+					this->selectedButton->SetButtonText(options[i]->GetButtonText());
+					this->currentSelectedIndex = i;
+					this->isExpanded = false;
+					break;
+				}
 			}
+			
+			
 		
 		}
 	}
@@ -288,15 +471,35 @@ void GUI::DropDownBox::Update()
 
 void GUI::DropDownBox::Render(sf::RenderTarget* target)
 {
+	
+	
 	if (this->isExpanded)
 	{
 		target->draw(this->dropDownRect);
-		this->selectedButton->Render(target);
-		for (auto i : options)
-			i->Render(target);
+		target->setView(this->scrollView);
+		
+		if (isSearching)
+		{
+			for (auto i : searchOptions)
+				i->Render(target);
+		}
+		else
+		{
+			for (auto i : options)
+				i->Render(target);
+		}
+		target->setView(this->normalView);
+		target->draw(this->scrollBarRect);
+		if (isScrollBarVisible)
+			target->draw(this->scrollRect);
+		if (this->searchBox != NULL)
+			this->searchBox->Render(target);
+		
 	}
-	else
-		this->selectedButton->Render(target);
+	target->setView(this->normalView);
+	this->selectedButton->Render(target);
+
+
 }
 
 const std::string GUI::DropDownBox::GetCurrentSelectedString() const
@@ -315,5 +518,14 @@ GUI::DropDownBox::~DropDownBox()
 	delete selectedButton;
 	for (auto i : options)
 		delete i;
+	delete searchBox;
 }
+
+float GUI::DropDownBox::Clamp(float value, float min, float max)
+{
+	
+	return(value <= min ? min : value >= max ? max : value);
+
+}
+
 

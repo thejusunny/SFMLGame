@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include<iostream>
 #include "Time.h"
+#include<math.h>
 
 namespace InputDevices
 {
@@ -18,6 +19,8 @@ namespace InputDevices
 		static float timeOfLastKeyPress;
 		static float timeSinceLastKeyPress;
 		static long lastFrameNo;
+		static sf::Vector2f lastMousePosition;
+		static sf::Vector2f mousePosCurrent;
 
 	public:
 		~Mouse();
@@ -27,8 +30,8 @@ namespace InputDevices
 		const static sf::Vector2f GetMousePosWindowf();
 		const static sf::Vector2f GetMousePosView(sf::View* view);
 		const static sf::Vector2i GetMousePosWindowFromView(sf::Vector2f pos, sf::View* view);
-
-
+		const static sf::Vector2f GetMouseDelta();
+		const static float GetMouseSpeedVertical();
 
 		static bool GetMouseKeyDown(sf::Mouse::Button button);
 

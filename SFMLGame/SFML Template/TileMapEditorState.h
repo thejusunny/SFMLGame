@@ -22,8 +22,7 @@ protected:
 	std::string tileInfoStr;
 	sf::Text mouseInformationText;
 	sf::Text tileInformationText;
-	GUI::TextBox *saveTextBox;
-	GUI::DropDownBox* layerDropDownbox;
+
 public :
 	
 	TileMapEditorState();

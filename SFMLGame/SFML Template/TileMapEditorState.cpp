@@ -37,8 +37,8 @@ TileMapEditorState::TileMapEditorState()
 	//Buttons
 	buttons["Load"] = new GUI::Button(sf::Vector2f(1540, 700), sf::Vector2f(60, 35), &this->font, "Load", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
 	buttons["Save"] = new GUI::Button(sf::Vector2f(1660, 700), sf::Vector2f(60, 35), &this->font, "Save", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
-	this->saveTextBox = new GUI::TextBox(sf::Vector2f(1540, 650), sf::Vector2f(200, 30), sf::Color::Red, sf::Color::White, sf::Color::Black);
-	this->layerDropDownbox = new GUI::DropDownBox(std::vector<std::string>{"Layer1","Layer2","Layer3","Layer4"}, sf::Vector2f(100, 30), sf::Vector2f(1720, 700));
+	
+	
 	
 }
 
@@ -53,7 +53,7 @@ void TileMapEditorState::InitFont()
 TileMapEditorState::~TileMapEditorState()
 {
 	delete this->map;
-	delete this-> saveTextBox;
+
 }
 
 void TileMapEditorState::CheckForQuit()
@@ -86,8 +86,7 @@ void TileMapEditorState::Update()
 	}*/
 	
 	
-	this->saveTextBox->Update();
-	this->layerDropDownbox->Update();
+
 	this->map->Update();
 	this->Input();
 }
@@ -110,7 +109,7 @@ void TileMapEditorState::RenderGUI(sf::RenderTarget* target)
 	
 
 	this->tileEditorTabSelector->Render(target);
-	this->layerDropDownbox->Render(target);
+
 }
 
 void TileMapEditorState::RenderHUD(sf::RenderTarget* target)

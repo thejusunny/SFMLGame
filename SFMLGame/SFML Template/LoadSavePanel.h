@@ -1,6 +1,8 @@
 #pragma once
 #include "SwitchableTab.h"
 #include "TileMap.h"
+#include "TagEditor.h"
+ 
 class LoadSavePanel:public SwitchablePanels
 {
 private:
@@ -9,6 +11,8 @@ private:
 	TileMap* tileMap;
 	GUI::TextBox* saveTextBox;
 	TileSelectorPanel* tileSelector;
+	TagEditor* tagEditor;
+
 	void Input();
 public:
 	LoadSavePanel(TileMap* map, TileSelectorPanel* tileSelectorPanel);

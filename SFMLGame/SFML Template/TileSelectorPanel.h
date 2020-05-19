@@ -27,8 +27,7 @@ public:
 	void ShowTab();
 	void HideTab();
 	TileLayerSelector* GetLayerSelector()const;
-	/*GUI::TextBox* saveTextBox;*/
-	GUI::DropDownBox* layerDropDownbox;
+
 
 private:
 
@@ -47,6 +46,7 @@ private:
 	std::vector <std::vector< sf::RectangleShape>> availableTiles;
 	std::map<std::string, GUI::Button*> buttons;
 	std::vector <sf::Texture> textures;
+
 	sf::RectangleShape tileSelectorRect;
 	sf::RectangleShape tileSelectorPanel;
 	sf::RectangleShape tileSelectorNavigationPanel;

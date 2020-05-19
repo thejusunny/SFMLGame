@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="CordinateConverter.cpp" />
     <ClCompile Include="Drawables.cpp" />
+    <ClCompile Include="DropDownSearchBox.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -101,6 +102,7 @@
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="SwitchableTab.cpp" />
+    <ClCompile Include="TagEditor.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileEditorTabSelector.cpp" />
     <ClCompile Include="TileEditorTools.cpp" />
@@ -109,10 +111,12 @@
     <ClCompile Include="TileMapEditorState.cpp" />
     <ClCompile Include="TileSelectorPanel.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CordinateConverter.h" />
     <ClInclude Include="Drawables.h" />
+    <ClInclude Include="DropDownSearchBox.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GUI.h" />
@@ -125,6 +129,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="SwitchableTab.h" />
+    <ClInclude Include="TagEditor.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileEditorTabSelector.h" />
     <ClInclude Include="TileEditorTools.h" />
@@ -133,6 +138,7 @@
     <ClInclude Include="TileMapEditorState.h" />
     <ClInclude Include="TileSelectorPanel.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SFMLGame.rc" />
