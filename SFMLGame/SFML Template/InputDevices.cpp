@@ -74,7 +74,7 @@ bool InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Button button)
 {
 
 	bool isPressed = sf::Mouse::isButtonPressed(button);
-	timeSinceLastKeyPress = Time::time - timeOfLastKeyPress;
+	//timeSinceLastKeyPress = Time::time - timeOfLastKeyPress;
 	
 
 	if (keyFlags[button] == false && isPressed)

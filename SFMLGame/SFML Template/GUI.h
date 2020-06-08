@@ -80,9 +80,12 @@ namespace GUI
 		Button* selectedButton;
 		sf::RectangleShape dropDownRect;
 		void Update();
+		const bool IsChanged()const;
 		void Render(sf::RenderTarget* target);
 		const std::string GetCurrentSelectedString()const;
 		const int GetCurrentSelectedIndex()const;
+		const void SetCurrentSelectedString(std::string str);
+		void UpdateOptions(std::vector<std::string> optionStrings);
 		~DropDownBox();
 		float Clamp(float value, float max, float min);
 	private:
@@ -102,6 +105,9 @@ namespace GUI
 		int noOfVisibleButtons;
 		bool isScrollBarVisible;
 		bool isScrollHeld;
+		bool optionChanged;
+		sf::Vector2f scrollViewDefaultCenterPos;
+		void CreateOptions();
 		
 	};
 	

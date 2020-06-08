@@ -25,7 +25,7 @@ TileLayerSelector::TileLayerSelector(TileMap *map)
 		this->tileIcons[i].setFillColor(sf::Color(255, 255, 255, 150));
 	
 	}
-	
+	this->layerDropDownBox = new GUI::DropDownBox(std::vector<std::string>{"Layer1", "Layer2", "Thej", "The", "Thejus", "Th", "Thejussss", "Thmore", "Layer6"}, sf::Vector2f(100, 30), sf::Vector2f(1740, 600), true);
 	
 
 	this->selectedRect.setOutlineColor(sf::Color::White);
@@ -42,6 +42,9 @@ TileLayerSelector::TileLayerSelector(TileMap *map)
 			tileIcons[i].setTexture(t[i]->GetTexture());
 		}
 	}*/
+	this->selectedIconIndex = -1;
+	this->selectedOutlineThickness = 2.f;
+	this->selectedOutlineColor = sf::Color::Red;
 	
 }
 void TileLayerSelector::UpdateLayerIcons()
@@ -57,10 +60,43 @@ void TileLayerSelector::UpdateLayerIcons()
 		}
 	}
 }
+void TileLayerSelector::UpdateSelectedTile(int index)
+{
+	
+	if (index < 0)
+	{
+
+		if (selectedIconIndex >= 0)
+		{
+			this->tileIcons[selectedIconIndex].setOutlineColor(sf::Color::Black);
+			this->tileIcons[selectedIconIndex].setOutlineThickness(1.f);
+			this->layerDropDownBox->SetCurrentSelectedString("");
+		}
+		selectedIconIndex = index;
+		return;
+	}
+		
+
+	if (selectedIconIndex >= 0)
+	{
+		this->tileIcons[selectedIconIndex].setOutlineColor(sf::Color::Black);
+		this->tileIcons[selectedIconIndex].setOutlineThickness(1.f);
+
+	}
+
+
+	this->selectedIconIndex = index;
+
+	this->layerDropDownBox->SetCurrentSelectedString(this->tileBuffer[index]->GetTileTag());
+	this->tileIcons[selectedIconIndex].setOutlineColor(sf::Color::Red);
+	this->tileIcons[selectedIconIndex].setOutlineThickness(selectedOutlineThickness);
+}
+
 void TileLayerSelector::UpdateLayerPanel(std::vector<Tile*> tiles,sf::Vector2u tileIndex)
 {
 	this->tileBuffer = tiles;
-	this->tileIndex = tileIndex;
+	this->tileIndex = tileIndex; // global tile position
+	UpdateSelectedTile(-1);
 	this->UpdateLayerIcons();
 	
 
@@ -70,38 +106,83 @@ void Layer::Render(sf::RenderTarget* target)
 	target->draw(layerRects);
 	//target->draw(tileType);
 	target->draw(layerName);
+	
 }
 void TileLayerSelector::Update()
 {
+	
+	this->layerDropDownBox->Update();
+	
+	
 	this->Input();
+
 }
 void TileLayerSelector::Render(sf::RenderTarget* target)
 {
 	target->draw(this->mainPanel);
+	for (auto& i : layers)
+		i->Render(target);
 	for (int i=0;i<tileIcons.size();i++)
 	{
 
 		target->draw(tileIcons[i]);
 	}
-	for (auto& i : layers)
-		i->Render(target);
-	if(iconSelected)
-	target->draw(this->selectedRect);
 
+	if(iconHeld)
+	target->draw(this->selectedRect);
+	this->layerDropDownBox->Render(target);
+
+
+}
+void TileLayerSelector::UpdateTags(std::vector<std::string> tags)
+{
+	//this->layerDropDownBox->options.resize(tags.size());
+	//for (int i = 0; i < tags.size(); i++)
+	//{
+	//	
+	//	this->layerDropDownBox->options[i]->SetButtonText(tags[i]);
+	//
+	//}
+	//auto it = layerDropDownBox->options.begin()+tags.size();
+	//layerDropDownBox->options.erase(it, layerDropDownBox->options.end());
+	this->layerDropDownBox->UpdateOptions(tags);
 }
 void TileLayerSelector::Input()
 {
+	
+	if (this->layerDropDownBox->IsChanged())
+	{
+	
+		this->tileBuffer[selectedIconIndex]->SetTileTag(this->layerDropDownBox->GetCurrentSelectedString());
+		this->map->UpdateLayers(tileIndex, tileBuffer);
+	
+	}
+	
 	//if mouse inside the whole panel do this
 	for (int i=0;i<this->noOfLayers;i++)
 	{
+		
+		if(InputDevices::Mouse::GetMouseKeyDown(sf::Mouse::Button::Left))
+		{
+			if (tileIcons[i].getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()) && tileIcons[i].getTexture() != NULL)
+			{
+				
+
+				this->iconSeleceted = true;
+				this->UpdateSelectedTile(i);
+			}
+			
+		
+		}
+		
 		if (InputDevices::Mouse::GetMouseKeyPress(sf::Mouse::Button::Left))
 		{
-			if (!iconSelected)
+			if (!iconHeld)
 			{
-				if (tileIcons[i].getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()))
+				if (tileIcons[i].getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf())&&tileIcons[i].getTexture()!=NULL)
 				{
 
-					this->iconSelected = true;
+					this->iconHeld = true;
 					this->mouseHeldIndex = i;
 					this->selectedRect.setTexture(tileBuffer[mouseHeldIndex]->GetTexture());
 
@@ -115,7 +196,7 @@ void TileLayerSelector::Input()
 		}
 		else
 		{
-			if (iconSelected)
+			if (iconHeld)
 			{
 				if (tileIcons[i].getGlobalBounds().contains(InputDevices::Mouse::GetMousePosWindowf()))
 				{
@@ -148,7 +229,11 @@ void TileLayerSelector::Input()
 						selectedRect.setTexture(NULL);
 						this->map->UpdateLayers(tileIndex, tileBuffer);
 						std::cout << "Dropped at " + i << "Selected Index " + mouseHeldIndex;
-						iconSelected = false;
+						if (iconSeleceted)
+						{
+							this->UpdateSelectedTile(i);
+						}
+						iconHeld = false;
 						mouseHeldIndex = -1;
 					}
 					

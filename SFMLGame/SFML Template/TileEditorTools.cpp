@@ -32,8 +32,8 @@ TileEditorTools::TileEditorTools(TileMap *map, TileSelectorPanel *tileSelector,s
 	this->toolHeaderText.setStyle(sf::Text::Bold);
 	this->toolButtons["Paint"] = new GUI::Button(sf::Vector2f(1510, 930), sf::Vector2f(50, 50), &this->font, "", sf::Color::White, sf::Color::Cyan, sf::Color::Red,0,&painToolTex);
 	this->toolButtons["Select"] = new GUI::Button(sf::Vector2f(1630, 930), sf::Vector2f(50, 50), &this->font, "", sf::Color::White, sf::Color::Cyan, sf::Color::Red,0,&selectToolTex);
-	this->currentSelectedTool = ToolType::SELECT; 
-	this->layerDropDownBox  = new GUI::DropDownBox(std::vector<std::string>{"Layer1", "Layer2", "Thej","The","Thejus", "Layer6"}, sf::Vector2f(100, 30), sf::Vector2f(1700, 750), true);
+	this->currentSelectedTool = ToolType::SELECT;
+	
 }
 
 void TileEditorTools::Update()
@@ -44,7 +44,7 @@ void TileEditorTools::Update()
 		button.second->Update(InputDevices::Mouse::GetMousePosWindowf());
 
 	}
-	this->layerDropDownBox->Update();
+	
 	this->Input();
 }
 
@@ -57,7 +57,7 @@ void TileEditorTools::Render(sf::RenderTarget* target)
 	for (auto& btn : toolButtons)
 		btn.second->Render(target);
 	target->draw(this->toolHeaderText);
-	this->layerDropDownBox->Render(target);
+
 }
 
 sf::Vector2u TileEditorTools::GetGridSelectedIndex()
@@ -69,6 +69,8 @@ void TileEditorTools::SetSelectorRect(sf::Texture* tex)
 {
 	this->gridSelectionRect.setTexture(tex);
 }
+
+
 
 void TileEditorTools::Input()
 {
@@ -112,7 +114,7 @@ void TileEditorTools::Input()
 					this->map->AddTile(tileSelectorPanel->GetSelectedTexture(), 1, tileSelectorPanel->GetTextureIndex(), sf::Vector2u(this->gridSelectionRect.getPosition().x, this->gridSelectionRect.getPosition().y), false);
 					prevPaintTilepos = currentTilepos;
 				}
-
+				this->layerSelector->UpdateLayerPanel(this->map->GetMap()[GetGridSelectedIndex().x][GetGridSelectedIndex().y], GetGridSelectedIndex());
 
 			}
 			else
@@ -147,3 +149,19 @@ void TileEditorTools::Input()
 
 	
 }
+
+void TileEditorTools::UpdateTags(std::vector<std::string> tags)
+{
+	//this->layerDropDownBox->options.resize(tags.size());
+	//for (int i = 0; i < tags.size(); i++)
+	//{
+	//	
+	//	this->layerDropDownBox->options[i]->SetButtonText(tags[i]->GetText());
+	//
+	//}
+	//auto it = layerDropDownBox->options.begin()+tags.size();
+	//layerDropDownBox->options.erase(it, layerDropDownBox->options.end());
+	//this->layerDropDownBox->UpdateOptions(tags);
+}
+
+

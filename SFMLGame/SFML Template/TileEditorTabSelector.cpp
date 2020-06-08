@@ -22,7 +22,8 @@ TileEditorTabSelector::TileEditorTabSelector(TileMap *map)
 	this->panelHeadingText.setPosition(sf::Vector2f(1858, 5));
 	
 	this->tabs["TileSelector"] = new Tab(new GUI::Button(sf::Vector2f(1850, 50), sf::Vector2f(60, 40), &this->font, "TileSelector", sf::Color::White, sf::Color::Cyan, sf::Color::Red,12), new TileSelectorPanel(map,&this->sideMainPanel));
-	this->tabs["Save&Load"] = new Tab(new GUI::Button(sf::Vector2f(1850, 100), sf::Vector2f(60, 40), &this->font, "Save&Load", sf::Color::White, sf::Color::Cyan, sf::Color::Red,12), new LoadSavePanel(map,GetPanel<TileSelectorPanel>("TileSelector")));
+	this->tabs["Tags"] = new Tab(new GUI::Button(sf::Vector2f(1850, 100), sf::Vector2f(60, 40), &this->font, "Tags", sf::Color::White, sf::Color::Cyan, sf::Color::Red, 12), new TagsPanel(GetPanel<TileSelectorPanel>("TileSelector")->GetLayerSelector()));
+	this->tabs["Save&Load"] = new Tab(new GUI::Button(sf::Vector2f(1850, 150), sf::Vector2f(60, 40), &this->font, "Save&Load", sf::Color::White, sf::Color::Cyan, sf::Color::Red,12), new LoadSavePanel(map,GetPanel<TileSelectorPanel>("TileSelector")));
 	this->prevButton = NULL;
 
 }

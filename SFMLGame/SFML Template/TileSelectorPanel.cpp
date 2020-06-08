@@ -262,6 +262,7 @@ TileLayerSelector* TileSelectorPanel::GetLayerSelector() const
 void TileSelectorPanel::ShowTab()
 {
 	this->isActive = true;
+
 }
 
 

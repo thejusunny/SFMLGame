@@ -3,13 +3,13 @@
 #include<stdlib.h>
 
 
-Tile::Tile(sf::Texture* texture, int layerNo,sf::Vector2u tilePosition, float gridSizeF, int textureIndex,bool collision=false)
+Tile::Tile(sf::Texture* texture, int layerNo,sf::Vector2u tilePosition, float gridSizeF, int textureIndex,bool collision=false,std::string tileTag)
 {
 	this->tileShape.setSize(sf::Vector2f( gridSizeF,gridSizeF));
 	this->layerNo = layerNo;
 	this->collision = collision;
 	this->texture = texture;
-
+	this->tileTag = tileTag;
 	this->textureIndex = textureIndex;
 	this->tileShape.setTexture(this->texture);
 	this->tileShape.setPosition(tilePosition.x,tilePosition.y);
@@ -49,7 +49,7 @@ sf::Texture* Tile::GetTexture()
 std::string Tile::GetTileInfoAsString()
 {
 	std::stringstream sStream;
-	sStream <<this-> textureIndex << " " <<this-> collision << " ";
+	sStream <<this-> textureIndex << " " <<this-> collision << " "<<this->tileTag;
 	return sStream.str();
 }
 
@@ -71,4 +71,14 @@ const bool Tile::IsCollidable() const
 void Tile::SetCollision(bool state)
 {
 	this->collision = state;
+}
+
+void Tile::SetTileTag(std::string tileTag)
+{
+	this->tileTag = tileTag;
+}
+
+const std::string Tile::GetTileTag() const
+{
+	return this->tileTag;
 }

@@ -16,7 +16,7 @@ public:
 	void Render(sf::RenderTarget* target);
 	sf::Vector2u GetGridSelectedIndex();
 	void SetSelectorRect(sf::Texture *tex);
-
+	void UpdateTags(std::vector<std::string> tags);// for now completely map the textbox array to drop down , later change it to have callbacks from textbox 
 private:
 	std::map<std::string, GUI::Button*> toolButtons;
 	sf::Texture selectToolTex, painToolTex;
@@ -29,7 +29,7 @@ private:
 	TileLayerSelector* layerSelector;
 	TileSelectorPanel* tileSelectorPanel;
 	sf::Vector2u prevPaintTilepos;
-	GUI::DropDownBox* layerDropDownBox;
 	void Input();
+	
 };
 

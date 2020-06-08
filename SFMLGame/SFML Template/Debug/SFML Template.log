@@ -1,3 +1,9 @@
 ﻿  TagEditor.cpp
 D:\GitHub\SFMLGame\SFMLGame\SFML Template\Vector.h(13,2): warning C4091:  'static ': ignored on left of 'Vector' when no variable is declared
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\CordinateConverter.h(13,2): warning C4091:  'static ': ignored on left of 'CordinateConverter' when no variable is declared
+  TagsPanel.cpp
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\TagEditor.cpp(150,21): warning C4018:  '<': signed/unsigned mismatch
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\Vector.h(13,2): warning C4091:  'static ': ignored on left of 'Vector' when no variable is declared
+  Generating Code...
+D:\GitHub\SFMLGame\SFMLGame\SFML Template\CordinateConverter.h(13,2): warning C4091:  'static ': ignored on left of 'CordinateConverter' when no variable is declared
   SFML Template.vcxproj -> D:\GitHub\SFMLGame\SFMLGame\Debug\SFMLGame.exe

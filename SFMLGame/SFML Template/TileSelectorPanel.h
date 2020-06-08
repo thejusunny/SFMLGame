@@ -27,7 +27,7 @@ public:
 	void ShowTab();
 	void HideTab();
 	TileLayerSelector* GetLayerSelector()const;
-
+	TileEditorTools* tileEditorTools;
 
 private:
 
@@ -56,7 +56,7 @@ private:
 	sf::Text pageNoText;
 	sf::Text selectionHeaderText;
 	TileLayerSelector *layerSelector;
-	TileEditorTools *tileEditorTools;
+
 
 	int noOfRows;
 	int noOfCollums;

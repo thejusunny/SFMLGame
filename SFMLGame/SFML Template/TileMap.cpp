@@ -103,6 +103,7 @@ void TileMap::LoadFromFile(std::string fileName,TileSelectorPanel *tileSelectorM
 
 	int textureIndex=0;
 	bool collision;
+	std::string tag;
 
 	
 
@@ -128,12 +129,12 @@ void TileMap::LoadFromFile(std::string fileName,TileSelectorPanel *tileSelectorM
 		}
 	
 		std::string texturePath = "";
-		while (inputStream>>x>>y>>z>> textureIndex >>collision)
+		while (inputStream>>x>>y>>z>> textureIndex >>collision>>tag)
 		{
 		
 			std::cout << x<<" "<<y<<" "<<z<<" "<< textureIndex <<"\n";
 			
-			this->map[x][y][z] = new Tile(tileSelectorMap->GetTextureFromIndex(textureIndex),0,sf::Vector2u(x*gridSizeU,y*gridSizeU), gridSizeU, textureIndex,collision);
+			this->map[x][y][z] = new Tile(tileSelectorMap->GetTextureFromIndex(textureIndex),0,sf::Vector2u(x*gridSizeU,y*gridSizeU), gridSizeU, textureIndex,collision,tag);
 			if(collision)
 			this->collisionRect.setPosition(map[x][y][z]->GetPosition());
 		}

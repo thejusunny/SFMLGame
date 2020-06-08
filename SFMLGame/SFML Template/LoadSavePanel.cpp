@@ -12,7 +12,7 @@ LoadSavePanel::LoadSavePanel(TileMap *map ,TileSelectorPanel *tileSelectorPanel)
 		std::cout << "Error";
 	}
 
-	tagEditor = new TagEditor(sf::Vector2f(1520, 200),sf::Vector2f(200,500),30);
+	
 	//Buttons
 	buttons["Load"] = new GUI::Button(sf::Vector2f(1540, 700), sf::Vector2f(60, 35), &this->font, "Load", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
 	buttons["Save"] = new GUI::Button(sf::Vector2f(1660, 700), sf::Vector2f(60, 35), &this->font, "Save", sf::Color::White, sf::Color::Cyan, sf::Color::Red);
@@ -59,11 +59,13 @@ void LoadSavePanel::Update()
 		this->saveTextBox->Update();
 		for (auto& btn : buttons)
 			btn.second->Update(InputDevices::Mouse::GetMousePosWindowf());
+
+		
+		this->saveTextBox->Update();
+		this->Input();
 	}
 
-	this->tagEditor->Update();
-	this->saveTextBox->Update();
-	this->Input();
+	
 }
 
 void LoadSavePanel::Render(sf::RenderTarget* target)
@@ -73,7 +75,9 @@ void LoadSavePanel::Render(sf::RenderTarget* target)
 		this->saveTextBox->Render(target);
 		for (auto& btn : buttons)
 			btn.second->Render(target);
+
+		
+		this->saveTextBox->Render(target);
 	}
-	this->tagEditor->Render(target);
-	this->saveTextBox->Render(target);
+	
 }

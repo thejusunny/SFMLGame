@@ -103,6 +103,7 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="SwitchableTab.cpp" />
     <ClCompile Include="TagEditor.cpp" />
+    <ClCompile Include="TagsPanel.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileEditorTabSelector.cpp" />
     <ClCompile Include="TileEditorTools.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="SwitchableTab.h" />
     <ClInclude Include="TagEditor.h" />
+    <ClInclude Include="TagsPanel.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileEditorTabSelector.h" />
     <ClInclude Include="TileEditorTools.h" />

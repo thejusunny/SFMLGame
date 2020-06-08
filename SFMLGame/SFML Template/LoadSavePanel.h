@@ -11,7 +11,6 @@ private:
 	TileMap* tileMap;
 	GUI::TextBox* saveTextBox;
 	TileSelectorPanel* tileSelector;
-	TagEditor* tagEditor;
 
 	void Input();
 public:

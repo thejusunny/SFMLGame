@@ -178,8 +178,10 @@ GUI::TextBox::TextBox(sf::Vector2f position, sf::Vector2f textRectSize, sf::Colo
 	this->text.setFont(this->font);
 	this->text.setFillColor(this->textColor);
 	this->text.setString(defaultText);
-	this->stringText = defaultText;
-	this->cursorIndex = defaultText.length();
+	if(defaultText.length()<=1)
+	this->text.setString("");
+	this->stringText = text.getString();
+	this->cursorIndex = text.getString().getSize();
 	this->characterWidthOffset = (fontSize / 2) + this->text.getLetterSpacing(); // with the letterspacing
 	this->text.setCharacterSize(this->fontSize);
 	this->textRectShape.setOutlineColor(borderColor);
@@ -329,7 +331,7 @@ GUI::DropDownBox::DropDownBox(std::vector<std::string> optionStrings,sf::Vector2
 	options.resize(optionStrings.size());
 	for (int i = 0; i < optionStrings.size(); i++)
 	{
-		this->options[i] = new Button(startOffset+ sf::Vector2f(postion.x,postion.y+((i+1)*size.y)), size, &this->font,optionStrings[i], sf::Color::White, sf::Color::Blue,sf::Color::Red);
+		this->options[i] = new Button(startOffset+ sf::Vector2f(postion.x,postion.y+((i+1)*size.y)), size- (Vector::Up), &this->font,optionStrings[i], sf::Color::White, sf::Color::Blue,sf::Color::Red);
 	}
 
 	this->currentHeightRatio = dropDownRect.getSize().y / options.size() + 1;
@@ -341,6 +343,7 @@ GUI::DropDownBox::DropDownBox(std::vector<std::string> optionStrings,sf::Vector2
 	dropDownSize.x /= 2.0;
 	dropDownSize.y /= 2.0;
 	this->scrollView.setCenter(dropDownRect.getPosition() + dropDownSize);
+	this->scrollViewDefaultCenterPos = scrollView.getCenter();
 	sf::Vector2f viewPort = dropDownRect.getSize();
 	viewPort.x /= 1920;
 	viewPort.y /= 1080;
@@ -355,6 +358,7 @@ void GUI::DropDownBox::Update()
 {
 	
 	searchOptions.clear();
+	this->optionChanged = false;
 	std::string searchText = this->searchBox->GetText();
 	if (searchText!=" ")
 	{
@@ -368,7 +372,6 @@ void GUI::DropDownBox::Update()
 			if (strstr(btn.c_str(),searchText.c_str() ))
 			{
 				this->searchOptions.push_back(options[i]);
-				
 				
 			}
 		}
@@ -415,7 +418,9 @@ void GUI::DropDownBox::Update()
 
 			scrollView.move(sf::Vector2f(0, mouseDeltaY));
 			sf::Vector2f scrollViewCenter= scrollView.getCenter();
-
+			if(isSearching)
+				scrollViewCenter.y = Clamp(scrollViewCenter.y, dropDownRect.getPosition().y + dropDownRect.getSize().y / 2, dropDownRect.getPosition().y + dropDownRect.getSize().y / 2 + (searchOptions.size() - noOfVisibleButtons) * optionSize.y);
+			else
 			scrollViewCenter.y = Clamp(scrollViewCenter.y, dropDownRect.getPosition().y+ dropDownRect.getSize().y/2, dropDownRect.getPosition().y+ dropDownRect.getSize().y / 2+ (options.size()-noOfVisibleButtons)* optionSize.y);
 			scrollView.setCenter(scrollViewCenter);
 			//std::cout << scrollView.getCenter().y << std::endl;
@@ -442,31 +447,68 @@ void GUI::DropDownBox::Update()
 		
 		if (this->searchBox!= NULL)
 		this->searchBox->Update();
-		for (int i=0;i<options.size();i++)
+		sf::FloatRect viewRect(scrollView.getCenter() - scrollView.getSize() / 2.f, scrollView.getSize());
+		if (isSearching)
 		{
-			//PROBLEM - options outside view fructum still gets selected check with  bounds to solve that
-
-			sf::FloatRect viewRect(scrollView.getCenter() - scrollView.getSize() / 2.f, scrollView.getSize());
-		
-			if (viewRect.intersects(options[i]->GetRect()))
+			if (!isScrollBarVisible)
 			{
-				options[i]->Update(InputDevices::Mouse::GetMousePosView(&scrollView));
-				if (options[i]->IsPressed())
+			
+				
+				this->scrollView.setCenter(this->scrollViewDefaultCenterPos);
+			}
+			for (int i = 0; i < searchOptions.size(); i++)
+			{
+				if (viewRect.intersects(searchOptions[i]->GetRect()))
 				{
+					searchOptions[i]->Update(InputDevices::Mouse::GetMousePosView(&scrollView));
+					if (searchOptions[i]->IsPressed())
+					{
 
-					this->selectedButton->SetButtonText(options[i]->GetButtonText());
-					this->currentSelectedIndex = i;
-					this->isExpanded = false;
-					break;
+						this->selectedButton->SetButtonText(searchOptions[i]->GetButtonText());
+						this->currentSelectedIndex = i;// useless stuff
+						this->isExpanded = false;
+						this->optionChanged = true;
+						break;
+					}
+
 				}
 			}
-			
-			
-		
+
+		}
+		else
+		{
+			for (int i = 0; i < options.size(); i++)
+			{
+				//PROBLEM - options outside view fructum still gets selected check with  bounds to solve that
+
+				
+
+				if (viewRect.intersects(options[i]->GetRect()))
+				{
+					options[i]->Update(InputDevices::Mouse::GetMousePosView(&scrollView));
+					if (options[i]->IsPressed())
+					{
+
+						this->selectedButton->SetButtonText(options[i]->GetButtonText());
+						this->currentSelectedIndex = i; // kinda useless stuff
+						this->isExpanded = false;
+						this->optionChanged = true;
+						break;
+					}
+				}
+
+
+
+			}
 		}
 	}
 
 
+}
+
+const bool GUI::DropDownBox::IsChanged() const
+{
+	return this->optionChanged;
 }
 
 void GUI::DropDownBox::Render(sf::RenderTarget* target)
@@ -511,6 +553,46 @@ const std::string GUI::DropDownBox::GetCurrentSelectedString() const
 const int GUI::DropDownBox::GetCurrentSelectedIndex() const
 {
 	return this->currentSelectedIndex;
+}
+
+const void GUI::DropDownBox::SetCurrentSelectedString(std::string str)
+{
+	
+	if (str.size() <= 0)
+	{
+		currentSelectedIndex = -1;
+		this->selectedButton->SetButtonText(" ");
+		return;
+	}
+	
+	
+	for (int i = 0; i < options.size(); i++)
+	{
+		if (str.compare(options[i]->GetButtonText())==0)
+		{
+			currentSelectedIndex = i;
+			this->selectedButton->SetButtonText(options[i]->GetButtonText());
+		}
+	
+	}
+}
+
+void GUI::DropDownBox::UpdateOptions(std::vector<std::string> optionStrings)
+{
+	this->options.resize(optionStrings.size());
+	for (int i = 0; i < optionStrings.size(); i++)
+	{
+		if (this->options[i] == NULL)
+		{
+			this->options[i] = new Button(this->optionStartPos+((float)i*optionSize), optionSize - (Vector::Up), &this->font, optionStrings[i], sf::Color::White, sf::Color::Blue, sf::Color::Red);
+			
+		}
+		options[i]->SetButtonText(optionStrings[i]);
+	}
+
+
+	//auto it = this->options.begin() + optionStrings.size();
+	//this->options.erase(it, this->options.end());
 }
 
 GUI::DropDownBox::~DropDownBox()

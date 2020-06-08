@@ -1,6 +1,7 @@
 #pragma once
 #include "TileSelectorPanel.h"
 #include "LoadSavePanel.h"
+#include "TagsPanel.h"
 class Tab
 {
 	
